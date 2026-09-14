@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>StudyHub - Дневник</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">StudyHub</div>
+      <nav class="menu">
+        <a href="#" class="menu-item active">Дневник</a>
+        <a href="#" class="menu-item">Расписание</a>
+        <a href="#" class="menu-item">Оценки</a>
+        <a href="#" class="menu-item">Задания</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="header">
+        <h2>Добрый день, Студент!</h2>
+        <div class="date" id="currentDate"></div>
+      </header>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Средний балл</div>
+          <div class="stat-value" id="avgGrade">0.0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Заданий активно</div>
+          <div class="stat-value" id="taskCount">0</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">Добавить запись</div>
+        <form id="diaryForm" class="form-row">
+          <input type="date" id="date" required>
+          <input type="text" id="subject" placeholder="Предмет (например, Математика)" required>
+          <input type="text" id="homework" placeholder="Задание (§12, №4)">
+          <select id="grade">
+            <option value="">Оценка</option>
+            <option value="5">5 (Отлично)</option>
+            <option value="4">4 (Хорошо)</option>
+            <option value="3">3 (Удовл.)</option>
+            <option value="2">2 (Неудовл.)</option>
+          </select>
+          <button type="submit" class="btn-primary">Сохранить</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">Расписание и оценки</div>
+        <table class="diary-table">
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Предмет</th>
+              <th>Задание</th>
+              <th>Оценка</th>
+              <th>Действие</th>
+            </tr>
+          </thead>
+          <tbody id="diaryTableBody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,131 +1,157 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Наши резюме</title>
-
     <link rel="stylesheet" href="style.css">
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
 
-    <!-- Общие вкладки -->
-
+    <!-- Общие вкладки сайта с настройками -->
     <div class="browser-tabs">
+        <div class="tabs-group">
+            <a href="index.html" class="browser-tab active">
+                <i class="fa-solid fa-house"></i> Главная
+            </a>
+            <a href="../Resume-Tamerlan/portfolio.html" class="browser-tab">
+                <i class="fa-solid fa-user-gear"></i> Резюме Тамерлана
+            </a>
+            <a href="../Resume-Dias/index.html" class="browser-tab">
+                <i class="fa-solid fa-code"></i> Резюме Диаса
+            </a>
+        </div>
 
-        <a href="index.html" class="browser-tab active">
-            🏠 Главная
-        </a>
-
-        <a href="../Resume-Tamerlan/portfolio.html" class="browser-tab">
-            👤 Резюме Тамерлана
-        </a>
-
-        <a href="../Resume-Dias/index.html" class="browser-tab">
-            👤 Резюме Диаса
-        </a>
-
+        <div class="tabs-controls">
+            <select class="tab-lang-select" aria-label="Выбор языка">
+                <option value="ru">RU</option>
+                <option value="kz">KZ / KK</option>
+                <option value="en">EN</option>
+            </select>
+            <button class="tab-theme-btn" aria-label="Переключить тему">
+                <i class="fa-solid fa-circle-half-stroke"></i>
+            </button>
+        </div>
     </div>
 
-
     <!-- Главная страница -->
-
     <main>
-
         <section class="hero">
-
-            <p class="hero-label">
-                OUR PORTFOLIO
+            <p class="hero-label" data-lang="hero_label">OUR PORTFOLIO</p>
+            <h1 data-lang="hero_title">Наши резюме</h1>
+            <p class="hero-description" data-lang="hero_desc">
+                Познакомьтесь с нами, нашими навыками, проектами и опытом.
             </p>
-
-            <h1>
-                Наши резюме
-            </h1>
-
-            <p class="hero-description">
-                Познакомьтесь с нами, нашими навыками,
-                проектами и опытом.
-            </p>
-
         </section>
-
 
         <section class="resumes-section">
-
-            <h2>
-                Выберите резюме
-            </h2>
-
-
+            <h2 data-lang="choose_resume">Выберите резюме</h2>
             <div class="resume-cards">
-
                 <!-- Карточка Тамерлана -->
-
-                <a
-                    href="../Resume-Tamerlan/portfolio.html"
-                    class="resume-card"
-                >
-
-                    <div class="avatar">
-                        T
-                    </div>
-
-                    <h3>
-                        Тamerlan Bolatov
-                    </h3>
-
-                    <p>
-                        IT Student & Project Team Lead
-                    </p>
-
-                    <span class="open-button">
-                        Открыть резюме →
-                    </span>
-
+                <a href="../Resume-Tamerlan/portfolio.html" class="resume-card">
+                    <div class="avatar">T</div>
+                    <h3>Тamerlan Bolatov</h3>
+                    <p data-lang="role_t">IT Student & Project Team Lead</p>
+                    <span class="open-button" data-lang="open_btn">Открыть резюме →</span>
                 </a>
-
 
                 <!-- Карточка Диаса -->
-
-                <a
-                    href="../Resume-Dias/index.html"
-                    class="resume-card"
-                >
-
-                    <div class="avatar">
-                        D
-                    </div>
-
-                    <h3>
-                        Диас Болатов
-                    </h3>
-
-                    <p>
-                        Frontend-разработчик / IT Student
-                    </p>
-
-                    <span class="open-button">
-                        Открыть резюме →
-                    </span>
-
+                <a href="../Resume-Dias/index.html" class="resume-card">
+                    <div class="avatar">D</div>
+                    <h3>Диас Болатов</h3>
+                    <p data-lang="role_d">Frontend-разработчик / IT Student</p>
+                    <span class="open-button" data-lang="open_btn">Открыть резюме →</span>
                 </a>
-
             </div>
-
         </section>
-
     </main>
 
-
     <footer>
-        <p>
-            © 2026 Our Resumes
-        </p>
+        <p data-lang="footer_text">© 2026 Our Resumes</p>
     </footer>
 
-</body>
+    <!-- Скрипт локализации и темы для главной страницы -->
+    <script>
+        const translationsMain = {
+            ru: {
+                hero_label: "OUR PORTFOLIO",
+                hero_title: "Наши резюме",
+                hero_desc: "Познакомьтесь с нами, нашими навыками, проектами и опытом.",
+                choose_resume: "Выберите резюме",
+                role_t: "IT Student & Project Team Lead",
+                role_d: "Frontend-разработчик / IT Student",
+                open_btn: "Открыть резюме →",
+                footer_text: "© 2026 Our Resumes"
+            },
+            kz: {
+                hero_label: "БІЗДІҢ ПОРТФОЛИО",
+                hero_title: "Біздің резюмелер",
+                hero_desc: "Бізбен, біздің дағдыларымызбен, жобаларымызбен және тәжірибемізбен танысыңыз.",
+                choose_resume: "Резюмені таңдаңыз",
+                role_t: "IT студенті және жоба жетекшісі",
+                role_d: "Frontend-әзірлеуші / IT Студент",
+                open_btn: "Резюмені ашу →",
+                footer_text: "© 2026 Біздің резюмелер"
+            },
+            en: {
+                hero_label: "OUR PORTFOLIO",
+                hero_title: "Our Resumes",
+                hero_desc: "Get to know us, our skills, projects, and experience.",
+                choose_resume: "Choose a resume",
+                role_t: "IT Student & Project Team Lead",
+                role_d: "Frontend Developer / IT Student",
+                open_btn: "Open resume →",
+                footer_text: "© 2026 Our Resumes"
+            }
+        };
 
+        const globalLangSelect = document.querySelector('.tab-lang-select');
+        const globalThemeBtn = document.querySelector('.tab-theme-btn');
+
+        // Применение темы
+        function applyTheme(theme) {
+            if(theme === 'light') document.body.classList.add('light-theme');
+            else document.body.classList.remove('light-theme');
+        }
+
+        // Применение языка
+        function applyLanguage(lang) {
+            const dict = translationsMain[lang] || translationsMain['ru'];
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if(dict[key]) el.textContent = dict[key];
+            });
+        }
+
+        // Загрузка сохраненных настроек
+        let currentLang = localStorage.getItem('selectedLanguage') || localStorage.getItem('language') || 'ru';
+        if (currentLang === 'kk') currentLang = 'kz';
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+
+        if (globalLangSelect) globalLangSelect.value = currentLang;
+        
+        applyTheme(currentTheme);
+        applyLanguage(currentLang);
+
+        // События для переключателей
+        if (globalLangSelect) {
+            globalLangSelect.addEventListener('change', (e) => {
+                const val = e.target.value;
+                localStorage.setItem('selectedLanguage', val);
+                localStorage.setItem('language', val === 'kz' ? 'kk' : val);
+                applyLanguage(val);
+            });
+        }
+
+        if (globalThemeBtn) {
+            globalThemeBtn.addEventListener('click', () => {
+                currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                localStorage.setItem('theme', currentTheme);
+                applyTheme(currentTheme);
+            });
+        }
+    </script>
+</body>
 </html>

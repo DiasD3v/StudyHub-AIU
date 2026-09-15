@@ -2,6 +2,7 @@
 <html lang="ru">
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,23 +13,35 @@
 
 <body>
 
-    <!-- Общие вкладки сайта -->
+    <!-- Общие вкладки сайта с настройками -->
+    <div class="browser-tabs">
+        <div class="tabs-group">
+            <!-- В Team-Resume/index.html добавь класс active сюда -->
+            <a href="../Team-Resume/index.html" class="browser-tab">
+                <i class="fa-solid fa-house"></i> Главная
+            </a>
+            <!-- В Resume-Tamerlan/portfolio.html добавь класс active сюда -->
+            <a href="../Resume-Tamerlan/portfolio.html" class="browser-tab">
+                <i class="fa-solid fa-user-gear"></i> Резюме Тамерлана
+            </a>
+            <!-- В Resume-Dias/index.html добавь класс active сюда -->
+            <a href="../Resume-Dias/index.html" class="browser-tab">
+                <i class="fa-solid fa-code"></i> Резюме Диаса
+            </a>
+        </div>
 
-<div class="browser-tabs">
-
-    <a href="../Team-Resume/index.html" class="browser-tab">
-        🏠 Главная
-    </a>
-
-    <a href="portfolio.html" class="browser-tab active">
-        👤 Резюме Тамерлана
-    </a>
-
-    <a href="../Resume-Dias/index.html" class="browser-tab">
-        👤 Резюме Диаса
-    </a>
-
-</div>
+        <!-- Переключатели темы и языка -->
+        <div class="tabs-controls">
+            <select class="tab-lang-select" aria-label="Выбор языка">
+                <option value="ru">RU</option>
+                <option value="kz">KZ / KK</option>
+                <option value="en">EN</option>
+            </select>
+            <button class="tab-theme-btn" aria-label="Переключить тему">
+                <i class="fa-solid fa-circle-half-stroke"></i>
+            </button>
+        </div>
+    </div>
 
 <header class="header">
     <nav class="navbar">
@@ -43,7 +56,7 @@
             <a href="#contact" data-lang="navContact">Контакты</a>
         </div>
 
-        <div class="header-actions">
+        <div class="header-actions" style="display: none;">
 
             <select id="languageSelect" aria-label="Выбор языка">
                 <option value="ru">RU</option>
@@ -628,6 +641,47 @@
 
 
 <script src="main.js"></script>
+
+<script>
+    // Универсальный скрипт для вкладок
+    document.addEventListener("DOMContentLoaded", () => {
+        const globalLangSelect = document.querySelector('.tab-lang-select');
+        const globalThemeBtn = document.querySelector('.tab-theme-btn');
+
+        // 1. Устанавливаем текущие значения из памяти
+        const currentLang = localStorage.getItem('selectedLanguage') || localStorage.getItem('language') || 'ru';
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        if (globalLangSelect) {
+            // Если выбран казахский (kz у Тамерлана, kk у Диаса)
+            globalLangSelect.value = (currentLang === 'kk' || currentLang === 'kz') ? 'kz' : currentLang;
+        }
+
+        // 2. Смена языка
+        if (globalLangSelect) {
+            globalLangSelect.addEventListener('change', (e) => {
+                const val = e.target.value;
+                // Сохраняем для Тамерлана
+                localStorage.setItem('selectedLanguage', val);
+                // Сохраняем для Диаса (у него казахский обозначается как kk)
+                localStorage.setItem('language', val === 'kz' ? 'kk' : val);
+                // Перезагружаем страницу для применения языков
+                location.reload(); 
+            });
+        }
+
+        // 3. Смена темы
+        if (globalThemeBtn) {
+            globalThemeBtn.addEventListener('click', () => {
+                const isDark = (localStorage.getItem('theme') || 'dark') === 'dark';
+                const newTheme = isDark ? 'light' : 'dark';
+                
+                localStorage.setItem('theme', newTheme);
+                location.reload(); // Перезагружаем страницу для смены стилей
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

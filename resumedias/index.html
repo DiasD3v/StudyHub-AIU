@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Диас Болатов | Резюме Frontend-разработчика</title>
+    <!-- Подключение файла стилей -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ (ШАПКА) -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="#hero" class="logo-name">Диас Болатов</a>
+                <span class="logo-subtitle" data-i18n="header_subtitle">Frontend-разработчик</span>
+            </div>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#hero" class="nav-link active" data-i18n="nav_home">Главная</a>
+                <a href="#about" class="nav-link" data-i18n="nav_about">Обо мне</a>
+                <a href="#skills" class="nav-link" data-i18n="nav_skills">Навыки</a>
+                <a href="#projects" class="nav-link" data-i18n="nav_projects">Проекты</a>
+                <a href="#education" class="nav-link" data-i18n="nav_edu">Образование</a>
+                <a href="#contact" class="nav-link" data-i18n="nav_contact">Контакты</a>
+            </nav>
+
+            <div class="header-controls">
+                <select id="lang-select" class="lang-select" aria-label="Выбор языка">
+                    <option value="ru">RU</option>
+                    <option value="kk">KK</option>
+                    <option value="en">EN</option>
+                </select>
+
+                <button id="theme-toggle" class="theme-btn" aria-label="Переключить тему">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <button id="menu-toggle" class="menu-toggle" aria-label="Открыть меню">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. ГЛАВНЫЙ ЭКРАН (HERO) -->
+        <section id="hero" class="hero-section">
+            <div class="container hero-container">
+                <div class="hero-image-wrapper fade-in">
+                    <img src="photo.jpg" alt="Диас Болатов" class="hero-photo" id="profile-img" onerror="this.src='https://via.placeholder.com/300?text=Dias+Bolatov'">
+                </div>
+                <div class="hero-content fade-in">
+                    <h1 class="hero-title">Диас Болатов</h1>
+                    <p class="hero-specialty" data-i18n="hero_specialty">Frontend-разработчик / IT Student</p>
+                    <p class="hero-university" data-i18n="hero_university"><i class="fa-solid fa-graduation-cap"></i> Astana International University (AIU)</p>
+                    <p class="hero-description" data-i18n="hero_desc">
+                        Студент AIU, начинающий Frontend-разработчик. Увлекаюсь созданием удобных пользовательских интерфейсов, изучением современных веб-технологий и программированием.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary" data-i18n="btn_contact">Связаться со мной</a>
+                        <a href="#projects" class="btn btn-secondary" data-i18n="btn_projects">Посмотреть проекты</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. РАЗДЕЛ «ОБО МНЕ» -->
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="about_title">Обо мне</h2>
+                <div class="about-grid">
+                    <div class="about-card card fade-in">
+                        <i class="fa-solid fa-user-graduate card-icon"></i>
+                        <h3 data-i18n="about_bio_title">О себе</h3>
+                        <p data-i18n="about_bio_text">Обучаюсь в Astana International University (AIU). Активно развиваюсь в сфере IT, интересуюсь веб-разработкой и алгоритмами.</p>
+                    </div>
+                    <div class="about-card card fade-in">
+                        <i class="fa-solid fa-bullseye card-icon"></i>
+                        <h3 data-i18n="about_goals_title">Цели в IT</h3>
+                        <p data-i18n="about_goals_text">Освоить современные JavaScript-фреймворки (React/Vue), прокачать навыки коммерческой верстки и вырасти до уровня Middle Frontend-разработчика.</p>
+                    </div>
+                    <div class="about-card card fade-in">
+                        <i class="fa-solid fa-code card-icon"></i>
+                        <h3 data-i18n="about_interests_title">Интересы</h3>
+                        <p data-i18n="about_interests_text">Веб-дизайн, оптимизация интерфейсов, участие в учебных IT-проектах, спортивное программирование и современные технологии.</p>
+                    </div>
+                    <div class="about-card card fade-in">
+                        <i class="fa-solid fa-star card-icon"></i>
+                        <h3 data-i18n="about_traits_title">Личные качества</h3>
+                        <p data-i18n="about_traits_text">Целеустремленность, внимательность к деталям, способность быстро обучаться, ответственность и аналитический склад ума.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. РАЗДЕЛ «НАВЫКИ» -->
+        <section id="skills" class="section bg-alt">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="skills_title">Мои навыки</h2>
+                <div class="skills-grid">
+                    <div class="skill-card card fade-in">
+                        <div class="skill-header">
+                            <i class="fa-brands fa-html5 skill-icon"></i>
+                            <h3>HTML5 & CSS3</h3>
+                        </div>
+                        <p data-i18n="skill_html_desc">Базовая верстка, адаптивный дизайн, стилизация компонентов</p>
+                        <div class="skill-level"><span style="width: 60%;"></span></div>
+                    </div>
+                    <div class="skill-card card fade-in">
+                        <div class="skill-header">
+                            <i class="fa-brands fa-js skill-icon"></i>
+                            <h3>JavaScript</h3>
+                        </div>
+                        <p data-i18n="skill_js_desc">Базовый уровень, манипуляция DOM, обработка событий</p>
+                        <div class="skill-level"><span style="width: 45%;"></span></div>
+                    </div>
+                    <div class="skill-card card fade-in">
+                        <div class="skill-header">
+                            <i class="fa-solid fa-code skill-icon"></i>
+                            <h3>C++</h3>
+                        </div>
+                        <p data-i18n="skill_cpp_desc">Основы алгоритмов, ООП, структурирование кода</p>
+                        <div class="skill-level"><span style="width: 50%;"></span></div>
+                    </div>
+                    <div class="skill-card card fade-in">
+                        <div class="skill-header">
+                            <i class="fa-brands fa-git-alt skill-icon"></i>
+                            <h3>Git & GitHub</h3>
+                        </div>
+                        <p data-i18n="skill_git_desc">Контроль версий, фиксация изменений, работа с репозиториями</p>
+                        <div class="skill-level"><span style="width: 55%;"></span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. РАЗДЕЛ «ПРОЕКТЫ» -->
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="projects_title">Проекты</h2>
+                <div class="projects-grid">
+                    <div class="project-card card fade-in">
+                        <div class="project-content">
+                            <h3>StudyHub-AIU</h3>
+                            <p data-i18n="project_1_desc">Платформа и студенческий хаб для учащихся AIU, созданный для удобного обмена учебными материалами и ресурсами.</p>
+                            <div class="project-tech">
+                                <span>HTML/CSS</span> <span>JavaScript</span> <span>Git</span>
+                            </div>
+                            <a href="https://github.com/DiasD3v/StudyHub-AIU" target="_blank" class="btn btn-small" data-i18n="btn_more">Открыть на GitHub</a>
+                        </div>
+                    </div>
+                    <div class="project-card card fade-in">
+                        <div class="project-content">
+                            <h3>Сайт-Резюме (Portfolio)</h3>
+                            <p data-i18n="project_2_desc">Адаптивный одностраничный сайт-портфолио с поддержкой светлой/тёмной темы и мультиязычности.</p>
+                            <div class="project-tech">
+                                <span>HTML</span> <span>CSS</span> <span>JS</span>
+                            </div>
+                            <a href="https://github.com/DiasD3v" target="_blank" class="btn btn-small" data-i18n="btn_more">Открыть на GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. РАЗДЕЛ «ОБРАЗОВАНИЕ И ОПЫТ» -->
+        <section id="education" class="section bg-alt">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="edu_title">Образование и опыт</h2>
+                <div class="timeline">
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content card">
+                            <span class="timeline-date">В процессе обучения</span>
+                            <h3 data-i18n="edu_uni">Astana International University (AIU)</h3>
+                            <h4 data-i18n="edu_degree">Студент IT-направления</h4>
+                            <p data-i18n="edu_achievements">Изучение базовых дисциплин по программированию, алгоритмам, структурам данных и веб-технологиям.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content card">
+                            <span class="timeline-date">Текущий период</span>
+                            <h3 data-i18n="exp_title">Практический опыт и проекты</h3>
+                            <h4 data-i18n="exp_company">Учебная практика / Самообучение</h4>
+                            <p data-i18n="exp_desc">На данный момент активно развиваю практические навыки через создание учебных проектов и работу с open-source репозиториями на GitHub.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. РАЗДЕЛ «ЯЗЫКИ» -->
+        <section id="languages" class="section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="lang_title">Владение языками</h2>
+                <div class="languages-grid">
+                    <div class="lang-card card fade-in">
+                        <i class="fa-solid fa-language lang-icon"></i>
+                        <h3 data-i18n="lang_kk">Казахский</h3>
+                        <p class="lang-level" data-i18n="lang_kk_lvl">Родной язык</p>
+                    </div>
+                    <div class="lang-card card fade-in">
+                        <i class="fa-solid fa-language lang-icon"></i>
+                        <h3 data-i18n="lang_ru">Русский</h3>
+                        <p class="lang-level" data-i18n="lang_ru_lvl">Свободный</p>
+                    </div>
+                    <div class="lang-card card fade-in">
+                        <i class="fa-solid fa-language lang-icon"></i>
+                        <h3 data-i18n="lang_en">Английский</h3>
+                        <p class="lang-level" data-i18n="lang_en_lvl">Элементарный (A2)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. РАЗДЕЛ «КОНТАКТЫ» -->
+        <section id="contact" class="section bg-alt">
+            <div class="container">
+                <h2 class="section-title fade-in" data-i18n="contact_title">Контакты</h2>
+                <div class="contact-grid">
+                    <div class="contact-info fade-in">
+                        <div class="info-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <a href="mailto:diasbolatov72@gmail.com">diasbolatov72@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-brands fa-github"></i>
+                            <div>
+                                <h4>GitHub</h4>
+                                <a href="https://github.com/DiasD3v" target="_blank">github.com/DiasD3v</a>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <h4 data-i18n="contact_city">Город</h4>
+                                <p data-i18n="contact_city_val">Астана, Казахстан</p>
+                            </div>
+                        </div>
+                        <div class="social-links">
+                            <a href="https://github.com/DiasD3v" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                            <a href="mailto:diasbolatov72@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+
+                    <form id="contact-form" class="contact-form card fade-in">
+                        <div class="form-group">
+                            <label for="name" data-i18n="form_name">Ваше имя</label>
+                            <input type="text" id="name" required placeholder="Введите ваше имя">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-i18n="form_email">Ваш Email</label>
+                            <input type="email" id="email" required placeholder="example@mail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-i18n="form_msg">Сообщение</label>
+                            <textarea id="message" rows="4" required placeholder="Введите текст сообщения..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" data-i18n="form_btn">Отправить сообщение</button>
+                        <div id="form-status" class="form-status"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; 2026 Диас Болатов. <span data-i18n="footer_rights">Все права защищены.</span></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

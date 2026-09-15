@@ -1,66 +1,615 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Моё резюме</title>
+    <title>Tamerlan Bolatov | IT Student</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div class="resume">
+<header class="header">
+    <nav class="navbar">
 
-        <header>
-            <h1>Твоё имя</h1>
-            <p>Начинающий разработчик</p>
-        </header>
+        <a href="#home" class="logo">TB<span>.</span></a>
 
-        <section>
-            <h2>Обо мне</h2>
-            <p>
-                Я начинающий программист, изучаю
-                Java, HTML, CSS и JavaScript.
-                Интересуюсь разработкой сайтов
-                и программированием.
+        <div class="nav-links">
+            <a href="#about" data-lang="navAbout">Обо мне</a>
+            <a href="#skills" data-lang="navSkills">Навыки</a>
+            <a href="#projects" data-lang="navProjects">Проекты</a>
+            <a href="#experience" data-lang="navExperience">Опыт</a>
+            <a href="#contact" data-lang="navContact">Контакты</a>
+        </div>
+
+        <div class="header-actions">
+
+            <select id="languageSelect" aria-label="Выбор языка">
+                <option value="ru">RU</option>
+                <option value="kz">KZ</option>
+                <option value="en">EN</option>
+            </select>
+
+            <button id="themeButton" class="theme-button">
+                ☀
+            </button>
+
+        </div>
+
+    </nav>
+</header>
+
+
+<main>
+
+    <!-- Главный экран -->
+    <section id="home" class="hero section">
+
+        <div class="hero-text">
+
+            <p class="small-title" data-lang="hello">
+                Привет, меня зовут
             </p>
-        </section>
 
-        <section>
-            <h2>Навыки</h2>
-            <ul>
-                <li>Java</li>
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>JavaScript</li>
-                <li>Git и GitHub</li>
-            </ul>
-        </section>
+            <h1>
+                Tamerlan <span>Bolatov</span>
+            </h1>
 
-        <section>
-            <h2>Образование</h2>
-            <p>
-                Студент. Изучаю программирование
-                и информационные технологии.
+            <h2 data-lang="profession">
+                IT Student & Project Team Lead
+            </h2>
+
+            <p class="hero-description" data-lang="heroDescription">
+                Студент IT-направления, изучающий программирование,
+                веб-разработку и Linux.
             </p>
-        </section>
 
-        <section>
-            <h2>Контакты</h2>
-            <p>Email: твоя почта</p>
-            <p>GitHub: твой профиль</p>
-        </section>
+            <div class="hero-buttons">
 
-        <button onclick="showMessage()">
-            Связаться со мной
-        </button>
+                <a href="#projects" class="button primary" data-lang="viewProjects">
+                    Мои проекты
+                </a>
 
-        <p id="message"></p>
+                <a href="#contact" class="button secondary" data-lang="contactMe">
+                    Связаться со мной
+                </a>
 
-    </div>
+            </div>
 
-    <script src="script.js"></script>
+        </div>
+
+
+        <div class="hero-photo">
+
+            <div class="photo-frame">
+                <img src="https://imglink.cc/cdn/SB_mbZWc0x.jpeg" alt="Tamerlan Bolatov">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Обо мне -->
+    <section id="about" class="section">
+
+        <p class="section-label" data-lang="aboutLabel">
+            ОБО МНЕ
+        </p>
+
+        <h2 class="section-title" data-lang="aboutTitle">
+            Немного обо мне
+        </h2>
+
+        <div class="about-grid">
+
+            <div class="about-text">
+
+                <p data-lang="aboutText">
+                    Я студент 3 курса Astana International University
+                    по специальности «Вычислительная техника и
+                    программное обеспечение». Мне нравится создавать
+                    сайты, изучать новые технологии и работать над
+                    IT-проектами в команде.
+                </p>
+
+            </div>
+
+
+            <div class="education-card">
+
+                <div class="card-icon">
+                    🎓
+                </div>
+
+                <h3 data-lang="educationTitle">
+                    Образование
+                </h3>
+
+                <p class="education-place">
+                    Astana International University
+                </p>
+
+                <p data-lang="educationSpeciality">
+                    Вычислительная техника и программное обеспечение
+                </p>
+
+                <span class="education-year" data-lang="educationYear">
+                    3 курс
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Навыки -->
+    <section id="skills" class="section skills-section">
+
+        <p class="section-label" data-lang="skillsLabel">
+            НАВЫКИ
+        </p>
+
+        <h2 class="section-title" data-lang="skillsTitle">
+            Мои технические навыки
+        </h2>
+
+        <div class="skills-grid">
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    ☕
+                </div>
+
+                <h3>Java</h3>
+
+                <p data-lang="javaText">
+                    Изучаю основы Java и ООП
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    🐍
+                </div>
+
+                <h3>Python</h3>
+
+                <p data-lang="pythonText">
+                    Базовые знания Python
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    ⚙
+                </div>
+
+                <h3>C++</h3>
+
+                <p data-lang="cppText">
+                    Начальный уровень
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    🌐
+                </div>
+
+                <h3>HTML / CSS / JS</h3>
+
+                <p data-lang="webText">
+                    Создание и оформление сайтов
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    🐙
+                </div>
+
+                <h3>GitHub</h3>
+
+                <p data-lang="githubText">
+                    Работа с репозиториями
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    🐧
+                </div>
+
+                <h3>Linux</h3>
+
+                <p data-lang="linuxText">
+                    Изучаю Linux и терминал
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    🎨
+                </div>
+
+                <h3>Figma</h3>
+
+                <p data-lang="figmaText">
+                    Создание дизайна интерфейсов
+                </p>
+
+            </div>
+
+
+            <div class="skill-card">
+
+                <div class="skill-icon">
+                    🤝
+                </div>
+
+                <h3>Teamwork</h3>
+
+                <p data-lang="teamworkText">
+                    Работа в команде и распределение задач
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Проекты -->
+    <section id="projects" class="section">
+
+        <p class="section-label" data-lang="projectsLabel">
+            ПРОЕКТЫ
+        </p>
+
+        <h2 class="section-title" data-lang="projectsTitle">
+            Мой проект
+        </h2>
+
+        <div class="project-card">
+
+            <div class="project-info">
+
+                <span class="project-number">
+                    01 / PROJECT
+                </span>
+
+                <h3>QamqorMed</h3>
+
+                <p class="project-description" data-lang="projectText">
+                    Медицинское веб-приложение, созданное нашей командой.
+                    В проекте я руководил командой, распределял задачи,
+                    планировал этапы разработки и работал с документацией.
+                </p>
+
+                <div class="project-tags">
+                    <span>HTML</span>
+                    <span>CSS</span>
+                    <span>JavaScript</span>
+                    <span>PostgreSQL</span>
+                </div>
+
+                <p class="project-role">
+                    <strong data-lang="roleTitle">
+                        Моя роль:
+                    </strong>
+
+                    <span data-lang="roleText">
+                        Project Team Lead
+                    </span>
+                </p>
+
+                <a
+                    href="https://qamqor-med.netlify.app/"
+                    target="_blank"
+                    class="button primary"
+                    data-lang="openProject"
+                >
+                    Открыть проект
+                </a>
+
+            </div>
+
+
+            <div class="project-visual">
+
+                <div class="project-window">
+
+                    <div class="window-top">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div class="window-content">
+
+                        <div class="window-logo">
+                            Qamqor<span>Med</span>
+                        </div>
+
+                        <div class="window-line"></div>
+                        <div class="window-line short"></div>
+
+                        <div class="window-cards">
+                            <div>Doctor appointment</div>
+                            <div>Medical records</div>
+                            <div>AI Assistant</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Опыт -->
+    <section id="experience" class="section">
+
+        <p class="section-label" data-lang="experienceLabel">
+            ОПЫТ
+        </p>
+
+        <h2 class="section-title" data-lang="experienceTitle">
+            Моя роль в команде
+        </h2>
+
+        <div class="experience-card">
+
+            <div class="experience-date">
+                QAMQORMED
+            </div>
+
+            <div class="experience-content">
+
+                <h3 data-lang="teamLeadTitle">
+                    Project Team Lead
+                </h3>
+
+                <p class="experience-company">
+                    QamqorMed
+                </p>
+
+                <p data-lang="experienceText">
+                    Во время разработки проекта я отвечал за организацию
+                    командной работы и контроль выполнения задач.
+                </p>
+
+                <ul>
+                    <li data-lang="experienceOne">
+                        Руководил командой во время разработки проекта
+                    </li>
+
+                    <li data-lang="experienceTwo">
+                        Распределял задачи между участниками команды
+                    </li>
+
+                    <li data-lang="experienceThree">
+                        Планировал этапы проекта и контролировал прогресс
+                    </li>
+
+                    <li data-lang="experienceFour">
+                        Работал с документацией и координировал команду
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Языки -->
+    <section id="languages" class="section languages-section">
+
+        <p class="section-label" data-lang="languagesLabel">
+            ЯЗЫКИ
+        </p>
+
+        <h2 class="section-title" data-lang="languagesTitle">
+            Языки общения
+        </h2>
+
+        <div class="languages-grid">
+
+            <div class="language-card">
+
+                <h3 data-lang="kazakh">
+                    Казахский
+                </h3>
+
+                <p data-lang="native">
+                    Родной язык
+                </p>
+
+                <div class="language-bar">
+                    <div class="language-progress full"></div>
+                </div>
+
+            </div>
+
+
+            <div class="language-card">
+
+                <h3 data-lang="russian">
+                    Русский
+                </h3>
+
+                <p data-lang="fluent">
+                    Свободно
+                </p>
+
+                <div class="language-bar">
+                    <div class="language-progress full"></div>
+                </div>
+
+            </div>
+
+
+            <div class="language-card">
+
+                <h3 data-lang="english">
+                    Английский
+                </h3>
+
+                <p>
+                    A2
+                </p>
+
+                <div class="language-bar">
+                    <div class="language-progress beginner"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Контакты -->
+    <section id="contact" class="section contact-section">
+
+        <p class="section-label" data-lang="contactLabel">
+            КОНТАКТЫ
+        </p>
+
+        <h2 class="section-title" data-lang="contactTitle">
+            Давайте работать вместе
+        </h2>
+
+        <p class="section-description" data-lang="contactText">
+            Вы можете связаться со мной по электронной почте
+            или найти меня в социальных сетях.
+        </p>
+
+        <div class="contact-grid">
+
+            <a
+                href="mailto:tamerlane.bolatov07@gmail.com"
+                class="contact-card"
+            >
+                <div class="contact-icon">
+                    ✉
+                </div>
+
+                <div>
+                    <h3>Email</h3>
+                    <p>tamerlane.bolatov07@gmail.com</p>
+                </div>
+            </a>
+
+
+            <a
+                href="tel:+77716990327"
+                class="contact-card"
+            >
+                <div class="contact-icon">
+                    ☎
+                </div>
+
+                <div>
+                    <h3 data-lang="phoneTitle">
+                        Телефон
+                    </h3>
+
+                    <p>
+                        +7 771 699 03 27
+                    </p>
+                </div>
+            </a>
+
+
+            <a
+                href="https://github.com/bta2602"
+                target="_blank"
+                class="contact-card"
+            >
+                <div class="contact-icon">
+                    🐙
+                </div>
+
+                <div>
+                    <h3>GitHub</h3>
+                    <p>github.com/bta2602</p>
+                </div>
+            </a>
+
+
+            <a
+                href="https://www.linkedin.com/in/bolatov-tamerlan"
+                target="_blank"
+                class="contact-card"
+            >
+                <div class="contact-icon">
+                    in
+                </div>
+
+                <div>
+                    <h3>LinkedIn</h3>
+                    <p>bolatov-tamerlan</p>
+                </div>
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        © 2026 Tamerlan Bolatov.
+        <span data-lang="rights">
+            Все права защищены.
+        </span>
+    </p>
+
+    <a href="#home" data-lang="backToTop">
+        Наверх ↑
+    </a>
+
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>

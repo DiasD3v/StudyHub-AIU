@@ -933,3 +933,64 @@ body.light-theme .window-logo {
     }
 
 }
+/* =================================
+   ОБЩИЕ ВКЛАДКИ САЙТА
+================================= */
+
+.browser-tabs {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+
+    padding: 10px 18px 0;
+
+    background: #202124;
+    border-bottom: 1px solid #3c4043;
+
+    overflow-x: auto;
+}
+
+.browser-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 22px;
+
+    color: #bdc1c6;
+    background: #292a2d;
+
+    border-radius: 12px 12px 0 0;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+.browser-tab:hover {
+    color: white;
+    background: #35363a;
+}
+
+.browser-tab.active {
+    color: white;
+    background: #3c4043;
+}
+
+@media (max-width: 700px) {
+
+    .browser-tabs {
+        padding: 8px 8px 0;
+    }
+
+    .browser-tab {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+}

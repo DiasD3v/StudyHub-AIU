@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Наши резюме</title>
+    <title>Наши резюме | Портфолио команды</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Иконки -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Общие вкладки сайта с настройками -->
+    <!-- =====================================
+         ОБЩИЕ ВКЛАДКИ НАВИГАЦИИ
+    ====================================== -->
     <div class="browser-tabs">
         <div class="tabs-group">
-            <a href="index.html" class="browser-tab active">
+            <button class="browser-tab active" data-target="page-main">
                 <i class="fa-solid fa-house"></i> Главная
-            </a>
-            <a href="../Resume-Tamerlan/portfolio.html" class="browser-tab">
-                <i class="fa-solid fa-user-gear"></i> Резюме Тамерлана
-            </a>
-            <a href="../Resume-Dias/index.html" class="browser-tab">
-                <i class="fa-solid fa-code"></i> Резюме Диаса
-            </a>
+            </button>
+            <button class="browser-tab" data-target="page-tamerlan">
+                <i class="fa-solid fa-user-gear"></i> Тамерлан
+            </button>
+            <button class="browser-tab" data-target="page-dias">
+                <i class="fa-solid fa-code"></i> Диас
+            </button>
         </div>
-
+        
         <div class="tabs-controls">
             <select class="tab-lang-select" aria-label="Выбор языка">
                 <option value="ru">RU</option>
@@ -36,122 +37,420 @@
         </div>
     </div>
 
-    <!-- Главная страница -->
-    <main>
-        <section class="hero">
-            <p class="hero-label" data-lang="hero_label">OUR PORTFOLIO</p>
-            <h1 data-lang="hero_title">Наши резюме</h1>
-            <p class="hero-description" data-lang="hero_desc">
-                Познакомьтесь с нами, нашими навыками, проектами и опытом.
-            </p>
-        </section>
+    <!-- =====================================
+         1. ГЛАВНАЯ СТРАНИЦА
+    ====================================== -->
+    <div id="page-main" class="page-view active">
+        <main>
+            <section class="hero-main">
+                <p class="hero-label" data-lang="hero_label">OUR PORTFOLIO</p>
+                <h1 data-lang="hero_title">Наши резюме</h1>
+                <p class="hero-description" data-lang="hero_desc">Познакомьтесь с нами, нашими навыками, проектами и опытом.</p>
+            </section>
+            
+            <section class="resumes-section">
+                <h2 data-lang="choose_resume">Выберите резюме</h2>
+                <div class="resume-cards">
+                    <button class="resume-card spa-link" data-target="page-tamerlan">
+                        <div class="avatar">T</div>
+                        <h3>Тamerlan Bolatov</h3>
+                        <p data-lang="role_t">IT Student & Project Team Lead</p>
+                        <span class="open-button" data-lang="open_btn">Открыть резюме →</span>
+                    </button>
+                    <button class="resume-card spa-link" data-target="page-dias">
+                        <div class="avatar">D</div>
+                        <h3>Диас Болатов</h3>
+                        <p data-lang="role_d">Frontend-разработчик / IT Student</p>
+                        <span class="open-button" data-lang="open_btn">Открыть резюме →</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+        <footer class="footer-main">
+            <p data-lang="footer_text">© 2026 Our Resumes</p>
+        </footer>
+    </div>
 
-        <section class="resumes-section">
-            <h2 data-lang="choose_resume">Выберите резюме</h2>
-            <div class="resume-cards">
-                <!-- Карточка Тамерлана -->
-                <a href="../Resume-Tamerlan/portfolio.html" class="resume-card">
-                    <div class="avatar">T</div>
-                    <h3>Тamerlan Bolatov</h3>
-                    <p data-lang="role_t">IT Student & Project Team Lead</p>
-                    <span class="open-button" data-lang="open_btn">Открыть резюме →</span>
-                </a>
+    <!-- =====================================
+         2. РЕЗЮМЕ ТАМЕРЛАНА
+    ====================================== -->
+    <div id="page-tamerlan" class="page-view" style="display: none;">
+        <header class="header">
+            <nav class="navbar">
+                <a href="#tam-home" class="logo">TB<span>.</span></a>
+                <div class="nav-links">
+                    <a href="#tam-about" data-lang="navAbout">Обо мне</a>
+                    <a href="#tam-skills" data-lang="navSkills">Навыки</a>
+                    <a href="#tam-projects" data-lang="navProjects">Проекты</a>
+                    <a href="#tam-experience" data-lang="navExperience">Опыт</a>
+                    <a href="#tam-contact" data-lang="navContact">Контакты</a>
+                </div>
+            </nav>
+        </header>
 
-                <!-- Карточка Диаса -->
-                <a href="../Resume-Dias/index.html" class="resume-card">
-                    <div class="avatar">D</div>
-                    <h3>Диас Болатов</h3>
-                    <p data-lang="role_d">Frontend-разработчик / IT Student</p>
-                    <span class="open-button" data-lang="open_btn">Открыть резюме →</span>
-                </a>
+        <main>
+            <section id="tam-home" class="hero section">
+                <div class="hero-text">
+                    <p class="small-title" data-lang="hello">Привет, меня зовут</p>
+                    <h1>Tamerlan <span>Bolatov</span></h1>
+                    <h2 data-lang="profession">IT Student & Project Team Lead</h2>
+                    <p class="hero-description" data-lang="heroDescription">Студент IT-направления, изучающий программирование, веб-разработку и Linux.</p>
+                    <div class="hero-buttons">
+                        <a href="#tam-projects" class="button primary" data-lang="viewProjects">Мои проекты</a>
+                        <a href="#tam-contact" class="button secondary" data-lang="contactMe">Связаться со мной</a>
+                    </div>
+                </div>
+                <div class="hero-photo">
+                    <div class="photo-frame"><img src="https://imglink.cc/cdn/SB_mbZWc0x.jpeg" alt="Tamerlan Bolatov"></div>
+                </div>
+            </section>
+
+            <section id="tam-about" class="section">
+                <p class="section-label" data-lang="aboutLabel">ОБО МНЕ</p>
+                <h2 class="section-title" data-lang="aboutTitle">Немного обо мне</h2>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p data-lang="aboutText">Я студент 3 курса Astana International University по специальности «Вычислительная техника и программное обеспечение». Мне нравится создавать сайты, изучать новые технологии и работать над IT-проектами в команде.</p>
+                    </div>
+                    <div class="education-card">
+                        <div class="card-icon">🎓</div>
+                        <h3 data-lang="educationTitle">Образование</h3>
+                        <p class="education-place">Astana International University</p>
+                        <p data-lang="educationSpeciality">Вычислительная техника и программное обеспечение</p>
+                        <span class="education-year" data-lang="educationYear">3 курс</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tam-skills" class="section skills-section">
+                <p class="section-label" data-lang="skillsLabel">НАВЫКИ</p>
+                <h2 class="section-title" data-lang="skillsTitle">Мои технические навыки</h2>
+                <div class="skills-grid">
+                    <div class="skill-card"><div class="skill-icon">☕</div><h3>Java</h3><p data-lang="javaText">Изучаю основы Java и ООП</p></div>
+                    <div class="skill-card"><div class="skill-icon">🐍</div><h3>Python</h3><p data-lang="pythonText">Базовые знания Python</p></div>
+                    <div class="skill-card"><div class="skill-icon">⚙</div><h3>C++</h3><p data-lang="cppText">Начальный уровень</p></div>
+                    <div class="skill-card"><div class="skill-icon">🌐</div><h3>HTML / CSS / JS</h3><p data-lang="webText">Создание и оформление сайтов</p></div>
+                    <div class="skill-card"><div class="skill-icon">🐙</div><h3>GitHub</h3><p data-lang="githubText">Работа с репозиториями</p></div>
+                    <div class="skill-card"><div class="skill-icon">🐧</div><h3>Linux</h3><p data-lang="linuxText">Изучаю Linux и терминал</p></div>
+                    <div class="skill-card"><div class="skill-icon">🎨</div><h3>Figma</h3><p data-lang="figmaText">Создание дизайна интерфейсов</p></div>
+                    <div class="skill-card"><div class="skill-icon">🤝</div><h3>Teamwork</h3><p data-lang="teamworkText">Работа в команде и распределение задач</p></div>
+                </div>
+            </section>
+
+            <section id="tam-projects" class="section">
+                <p class="section-label" data-lang="projectsLabel">ПРОЕКТЫ</p>
+                <h2 class="section-title" data-lang="projectsTitle">Мой проект</h2>
+                <div class="project-card">
+                    <div class="project-info">
+                        <span class="project-number">01 / PROJECT</span>
+                        <h3>QamqorMed</h3>
+                        <p class="project-description" data-lang="projectText">Медицинское веб-приложение, созданное нашей командой. В проекте я руководил командой, распределял задачи, планировал этапы разработки и работал с документацией.</p>
+                        <div class="project-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>PostgreSQL</span></div>
+                        <p class="project-role"><strong data-lang="roleTitle">Моя роль:</strong> <span data-lang="roleText">Project Team Lead</span></p>
+                        <a href="https://qamqor-med.netlify.app/" target="_blank" class="button primary" data-lang="openProject">Открыть проект</a>
+                    </div>
+                    <div class="project-visual">
+                        <div class="project-window">
+                            <div class="window-top"><span></span><span></span><span></span></div>
+                            <div class="window-content">
+                                <div class="window-logo">Qamqor<span>Med</span></div>
+                                <div class="window-line"></div><div class="window-line short"></div>
+                                <div class="window-cards"><div>Doctor appointment</div><div>Medical records</div><div>AI Assistant</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tam-experience" class="section">
+                <p class="section-label" data-lang="experienceLabel">ОПЫТ</p>
+                <h2 class="section-title" data-lang="experienceTitle">Моя роль в команде</h2>
+                <div class="experience-card">
+                    <div class="experience-date">QAMQORMED</div>
+                    <div class="experience-content">
+                        <h3 data-lang="teamLeadTitle">Project Team Lead</h3>
+                        <p class="experience-company">QamqorMed</p>
+                        <p data-lang="experienceText">Во время разработки проекта я отвечал за организацию командной работы и контроль выполнения задач.</p>
+                        <ul>
+                            <li data-lang="experienceOne">Руководил командой во время разработки проекта</li>
+                            <li data-lang="experienceTwo">Распределял задачи между участниками команды</li>
+                            <li data-lang="experienceThree">Планировал этапы проекта и контролировал прогресс</li>
+                            <li data-lang="experienceFour">Работал с документацией и координировал команду</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tam-languages" class="section languages-section">
+                <p class="section-label" data-lang="languagesLabel">ЯЗЫКИ</p>
+                <h2 class="section-title" data-lang="languagesTitle">Языки общения</h2>
+                <div class="languages-grid">
+                    <div class="language-card"><h3 data-lang="kazakh">Казахский</h3><p data-lang="native">Родной язык</p><div class="language-bar"><div class="language-progress full"></div></div></div>
+                    <div class="language-card"><h3 data-lang="russian">Русский</h3><p data-lang="fluent">Свободно</p><div class="language-bar"><div class="language-progress full"></div></div></div>
+                    <div class="language-card"><h3 data-lang="english">Английский</h3><p>A2</p><div class="language-bar"><div class="language-progress beginner"></div></div></div>
+                </div>
+            </section>
+
+            <section id="tam-contact" class="section contact-section">
+                <p class="section-label" data-lang="contactLabel">КОНТАКТЫ</p>
+                <h2 class="section-title" data-lang="contactTitle">Давайте работать вместе</h2>
+                <p class="section-description" data-lang="contactText">Вы можете связаться со мной по электронной почте или найти меня в социальных сетях.</p>
+                <div class="contact-grid">
+                    <a href="mailto:tamerlane.bolatov07@gmail.com" class="contact-card"><div class="contact-icon">✉</div><div><h3>Email</h3><p>tamerlane.bolatov07@gmail.com</p></div></a>
+                    <a href="tel:+77716990327" class="contact-card"><div class="contact-icon">☎</div><div><h3 data-lang="phoneTitle">Телефон</h3><p>+7 771 699 03 27</p></div></a>
+                    <a href="https://github.com/bta2602" target="_blank" class="contact-card"><div class="contact-icon">🐙</div><div><h3>GitHub</h3><p>github.com/bta2602</p></div></a>
+                    <a href="https://www.linkedin.com/in/bolatov-tamerlan" target="_blank" class="contact-card"><div class="contact-icon">in</div><div><h3>LinkedIn</h3><p>bolatov-tamerlan</p></div></a>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>© 2026 Tamerlan Bolatov. <span data-lang="rights">Все права защищены.</span></p>
+            <a href="#tam-home" data-lang="backToTop">Наверх ↑</a>
+        </footer>
+    </div>
+
+    <!-- =====================================
+         3. РЕЗЮМЕ ДИАСА
+    ====================================== -->
+    <div id="page-dias" class="page-view" style="display: none;">
+        <header class="header">
+            <div class="container header-container">
+                <div class="logo">
+                    <a href="#dias-hero" class="logo-name">Диас Болатов</a>
+                    <span class="logo-subtitle" data-i18n="header_subtitle">Frontend-разработчик</span>
+                </div>
+                <nav class="nav-menu" id="nav-menu">
+                    <a href="#dias-hero" class="nav-link active" data-i18n="nav_home">Главная</a>
+                    <a href="#dias-about" class="nav-link" data-i18n="nav_about">Обо мне</a>
+                    <a href="#dias-skills" class="nav-link" data-i18n="nav_skills">Навыки</a>
+                    <a href="#dias-projects" class="nav-link" data-i18n="nav_projects">Проекты</a>
+                    <a href="#dias-education" class="nav-link" data-i18n="nav_edu">Образование</a>
+                    <a href="#dias-contact" class="nav-link" data-i18n="nav_contact">Контакты</a>
+                </nav>
+                <div class="header-controls">
+                    <button id="menu-toggle" class="menu-toggle" aria-label="Открыть меню"><i class="fa-solid fa-bars"></i></button>
+                </div>
             </div>
-        </section>
-    </main>
+        </header>
 
-    <footer>
-        <p data-lang="footer_text">© 2026 Our Resumes</p>
-    </footer>
+        <main>
+            <section id="dias-hero" class="hero-section">
+                <div class="container hero-container">
+                    <div class="hero-image-wrapper fade-in">
+                        <img src="photo.jpg" alt="Диас Болатов" class="hero-photo" onerror="this.src='https://via.placeholder.com/300?text=Dias+Bolatov'">
+                    </div>
+                    <div class="hero-content fade-in">
+                        <h1 class="hero-title">Диас Болатов</h1>
+                        <p class="hero-specialty" data-i18n="hero_specialty">Frontend-разработчик / IT Student</p>
+                        <p class="hero-university" data-i18n="hero_university"><i class="fa-solid fa-graduation-cap"></i> Astana International University (AIU)</p>
+                        <p class="hero-description" data-i18n="hero_desc">Студент AIU, начинающий Frontend-разработчик. Увлекаюсь созданием удобных пользовательских интерфейсов, изучением современных веб-технологий и программированием.</p>
+                        <div class="hero-buttons">
+                            <a href="#dias-contact" class="btn btn-primary" data-i18n="btn_contact">Связаться со мной</a>
+                            <a href="#dias-projects" class="btn btn-secondary" data-i18n="btn_projects">Посмотреть проекты</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Скрипт локализации и темы для главной страницы -->
+            <section id="dias-about" class="section">
+                <div class="container">
+                    <h2 class="section-title fade-in" data-i18n="about_title">Обо мне</h2>
+                    <div class="about-grid">
+                        <div class="about-card card fade-in"><i class="fa-solid fa-user-graduate card-icon"></i><h3 data-i18n="about_bio_title">О себе</h3><p data-i18n="about_bio_text">Обучаюсь в Astana International University (AIU). Активно развиваюсь в сфере IT.</p></div>
+                        <div class="about-card card fade-in"><i class="fa-solid fa-bullseye card-icon"></i><h3 data-i18n="about_goals_title">Цели в IT</h3><p data-i18n="about_goals_text">Освоить современные JavaScript-фреймворки (React/Vue) и вырасти до Middle.</p></div>
+                        <div class="about-card card fade-in"><i class="fa-solid fa-code card-icon"></i><h3 data-i18n="about_interests_title">Интересы</h3><p data-i18n="about_interests_text">Веб-дизайн, оптимизация интерфейсов, участие в проектах.</p></div>
+                        <div class="about-card card fade-in"><i class="fa-solid fa-star card-icon"></i><h3 data-i18n="about_traits_title">Личные качества</h3><p data-i18n="about_traits_text">Целеустремленность, внимательность к деталям, способность быстро обучаться.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dias-skills" class="section bg-alt">
+                <div class="container">
+                    <h2 class="section-title fade-in" data-i18n="skills_title">Мои навыки</h2>
+                    <div class="skills-grid">
+                        <div class="skill-card card fade-in"><div class="skill-header"><i class="fa-brands fa-html5 skill-icon"></i><h3>HTML5 & CSS3</h3></div><p data-i18n="skill_html_desc">Базовая верстка, адаптивный дизайн.</p><div class="skill-level"><span style="width: 60%;"></span></div></div>
+                        <div class="skill-card card fade-in"><div class="skill-header"><i class="fa-brands fa-js skill-icon"></i><h3>JavaScript</h3></div><p data-i18n="skill_js_desc">Базовый уровень, манипуляция DOM.</p><div class="skill-level"><span style="width: 45%;"></span></div></div>
+                        <div class="skill-card card fade-in"><div class="skill-header"><i class="fa-solid fa-code skill-icon"></i><h3>C++</h3></div><p data-i18n="skill_cpp_desc">Основы алгоритмов, ООП.</p><div class="skill-level"><span style="width: 50%;"></span></div></div>
+                        <div class="skill-card card fade-in"><div class="skill-header"><i class="fa-brands fa-git-alt skill-icon"></i><h3>Git & GitHub</h3></div><p data-i18n="skill_git_desc">Контроль версий, фиксация изменений.</p><div class="skill-level"><span style="width: 55%;"></span></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dias-projects" class="section">
+                <div class="container">
+                    <h2 class="section-title fade-in" data-i18n="projects_title">Проекты</h2>
+                    <div class="projects-grid">
+                        <div class="project-card card fade-in"><div class="project-content"><h3>StudyHub-AIU</h3><p data-i18n="project_1_desc">Платформа и студенческий хаб для учащихся AIU.</p><div class="project-tech"><span>HTML/CSS</span><span>JS</span></div><a href="https://github.com/DiasD3v/StudyHub-AIU" target="_blank" class="btn btn-small" data-i18n="btn_more">GitHub</a></div></div>
+                        <div class="project-card card fade-in"><div class="project-content"><h3>Сайт-Резюме</h3><p data-i18n="project_2_desc">Адаптивный сайт с темами и языками.</p><div class="project-tech"><span>HTML</span><span>CSS</span><span>JS</span></div><a href="https://github.com/DiasD3v" target="_blank" class="btn btn-small" data-i18n="btn_more">GitHub</a></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dias-education" class="section bg-alt">
+                <div class="container">
+                    <h2 class="section-title fade-in" data-i18n="edu_title">Образование и опыт</h2>
+                    <div class="timeline">
+                        <div class="timeline-item fade-in"><div class="timeline-dot"></div><div class="timeline-content card"><span class="timeline-date">В процессе обучения</span><h3 data-i18n="edu_uni">Astana International University (AIU)</h3><h4 data-i18n="edu_degree">Студент IT-направления</h4><p data-i18n="edu_achievements">Изучение базовых дисциплин по программированию.</p></div></div>
+                        <div class="timeline-item fade-in"><div class="timeline-dot"></div><div class="timeline-content card"><span class="timeline-date">Текущий период</span><h3 data-i18n="exp_title">Практический опыт и проекты</h3><h4 data-i18n="exp_company">Учебная практика / Самообучение</h4><p data-i18n="exp_desc">Развиваю навыки через создание учебных проектов.</p></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dias-languages" class="section">
+                <div class="container">
+                    <h2 class="section-title fade-in" data-i18n="lang_title">Владение языками</h2>
+                    <div class="languages-grid">
+                        <div class="lang-card card fade-in"><i class="fa-solid fa-language lang-icon"></i><h3 data-i18n="lang_kk">Казахский</h3><p class="lang-level" data-i18n="lang_kk_lvl">Родной язык</p></div>
+                        <div class="lang-card card fade-in"><i class="fa-solid fa-language lang-icon"></i><h3 data-i18n="lang_ru">Русский</h3><p class="lang-level" data-i18n="lang_ru_lvl">Свободный</p></div>
+                        <div class="lang-card card fade-in"><i class="fa-solid fa-language lang-icon"></i><h3 data-i18n="lang_en">Английский</h3><p class="lang-level" data-i18n="lang_en_lvl">A2</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dias-contact" class="section bg-alt">
+                <div class="container">
+                    <h2 class="section-title fade-in" data-i18n="contact_title">Контакты</h2>
+                    <div class="contact-grid">
+                        <div class="contact-info fade-in">
+                            <div class="info-item"><i class="fa-solid fa-envelope"></i><div><h4>Email</h4><a href="mailto:diasbolatov72@gmail.com">diasbolatov72@gmail.com</a></div></div>
+                            <div class="info-item"><i class="fa-brands fa-github"></i><div><h4>GitHub</h4><a href="https://github.com/DiasD3v" target="_blank">github.com/DiasD3v</a></div></div>
+                            <div class="social-links"><a href="https://github.com/DiasD3v" target="_blank"><i class="fa-brands fa-github"></i></a><a href="mailto:diasbolatov72@gmail.com"><i class="fa-solid fa-envelope"></i></a></div>
+                        </div>
+                        <form id="contact-form" class="contact-form card fade-in">
+                            <div class="form-group"><label for="name" data-i18n="form_name">Ваше имя</label><input type="text" id="name" required></div>
+                            <div class="form-group"><label for="email" data-i18n="form_email">Ваш Email</label><input type="email" id="email" required></div>
+                            <div class="form-group"><label for="message" data-i18n="form_msg">Сообщение</label><textarea id="message" rows="4" required></textarea></div>
+                            <button type="submit" class="btn btn-primary" data-i18n="form_btn">Отправить сообщение</button>
+                            <div id="form-status" class="form-status"></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="footer"><div class="container footer-container"><p>&copy; 2026 Диас Болатов.</p></div></footer>
+    </div>
+
     <script>
-        const translationsMain = {
-            ru: {
-                hero_label: "OUR PORTFOLIO",
-                hero_title: "Наши резюме",
-                hero_desc: "Познакомьтесь с нами, нашими навыками, проектами и опытом.",
-                choose_resume: "Выберите резюме",
-                role_t: "IT Student & Project Team Lead",
-                role_d: "Frontend-разработчик / IT Student",
-                open_btn: "Открыть резюме →",
-                footer_text: "© 2026 Our Resumes"
-            },
-            kz: {
-                hero_label: "БІЗДІҢ ПОРТФОЛИО",
-                hero_title: "Біздің резюмелер",
-                hero_desc: "Бізбен, біздің дағдыларымызбен, жобаларымызбен және тәжірибемізбен танысыңыз.",
-                choose_resume: "Резюмені таңдаңыз",
-                role_t: "IT студенті және жоба жетекшісі",
-                role_d: "Frontend-әзірлеуші / IT Студент",
-                open_btn: "Резюмені ашу →",
-                footer_text: "© 2026 Біздің резюмелер"
-            },
-            en: {
-                hero_label: "OUR PORTFOLIO",
-                hero_title: "Our Resumes",
-                hero_desc: "Get to know us, our skills, projects, and experience.",
-                choose_resume: "Choose a resume",
-                role_t: "IT Student & Project Team Lead",
-                role_d: "Frontend Developer / IT Student",
-                open_btn: "Open resume →",
-                footer_text: "© 2026 Our Resumes"
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // =====================================
+            // 1. ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ (SPA)
+            // =====================================
+            function switchPage(targetId) {
+                document.querySelectorAll('.page-view').forEach(page => page.style.display = 'none');
+                document.querySelectorAll('.browser-tab').forEach(tab => tab.classList.remove('active'));
+                
+                document.getElementById(targetId).style.display = 'block';
+                const activeTab = document.querySelector(`.browser-tab[data-target="${targetId}"]`);
+                if (activeTab) activeTab.classList.add('active');
+                window.scrollTo(0, 0);
             }
-        };
 
-        const globalLangSelect = document.querySelector('.tab-lang-select');
-        const globalThemeBtn = document.querySelector('.tab-theme-btn');
-
-        // Применение темы
-        function applyTheme(theme) {
-            if(theme === 'light') document.body.classList.add('light-theme');
-            else document.body.classList.remove('light-theme');
-        }
-
-        // Применение языка
-        function applyLanguage(lang) {
-            const dict = translationsMain[lang] || translationsMain['ru'];
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                const key = el.getAttribute('data-lang');
-                if(dict[key]) el.textContent = dict[key];
+            document.querySelectorAll('.browser-tab, .spa-link').forEach(el => {
+                el.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    if(target) switchPage(target);
+                });
             });
-        }
 
-        // Загрузка сохраненных настроек
-        let currentLang = localStorage.getItem('selectedLanguage') || localStorage.getItem('language') || 'ru';
-        if (currentLang === 'kk') currentLang = 'kz';
-        let currentTheme = localStorage.getItem('theme') || 'dark';
+            // =====================================
+            // 2. СМЕНА ТЕМЫ
+            // =====================================
+            const themeBtn = document.querySelector('.tab-theme-btn');
+            function applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+            let currentTheme = localStorage.getItem('theme') || 'dark';
+            applyTheme(currentTheme);
+            if(themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    applyTheme(currentTheme);
+                });
+            }
 
-        if (globalLangSelect) globalLangSelect.value = currentLang;
-        
-        applyTheme(currentTheme);
-        applyLanguage(currentLang);
+            // =====================================
+            // 3. ПОЛНЫЕ СЛОВАРИ ДЛЯ ВСЕХ 3-Х СТРАНИЦ
+            // =====================================
+            const langSelect = document.querySelector('.tab-lang-select');
+            
+            // Словарь Главной страницы
+            const dictMain = {
+                ru: { hero_label: "OUR PORTFOLIO", hero_title: "Наши резюме", hero_desc: "Познакомьтесь с нами, нашими навыками, проектами и опытом.", choose_resume: "Выберите резюме", role_t: "IT Student & Project Team Lead", role_d: "Frontend-разработчик / IT Student", open_btn: "Открыть резюме →", footer_text: "© 2026 Our Resumes" },
+                kz: { hero_label: "БІЗДІҢ ПОРТФОЛИО", hero_title: "Біздің түйіндемелер", hero_desc: "Бізбен, біздің дағдыларымызбен, жобаларымызбен және тәжірибемізбен танысыңыз.", choose_resume: "Түйіндемені таңдаңыз", role_t: "IT студенті және жоба жетекшісі", role_d: "Frontend-әзірлеуші / IT Студент", open_btn: "Түйіндемені ашу →", footer_text: "© 2026 Біздің түйіндемелер" },
+                en: { hero_label: "OUR PORTFOLIO", hero_title: "Our Resumes", hero_desc: "Get to know us, our skills, projects, and experience.", choose_resume: "Choose a resume", role_t: "IT Student & Project Team Lead", role_d: "Frontend Developer / IT Student", open_btn: "Open resume →", footer_text: "© 2026 Our Resumes" }
+            };
 
-        // События для переключателей
-        if (globalLangSelect) {
-            globalLangSelect.addEventListener('change', (e) => {
-                const val = e.target.value;
-                localStorage.setItem('selectedLanguage', val);
-                localStorage.setItem('language', val === 'kz' ? 'kk' : val);
-                applyLanguage(val);
-            });
-        }
+            // Полный словарь Тамерлана
+            const dictTam = {
+                ru: {
+                    navAbout: "Обо мне", navSkills: "Навыки", navProjects: "Проекты", navExperience: "Опыт", navContact: "Контакты", hello: "Привет, меня зовут", profession: "IT Student & Project Team Lead", heroDescription: "Студент IT-направления, изучающий программирование, веб-разработку и Linux.", viewProjects: "Мои проекты", contactMe: "Связаться со мной", aboutLabel: "ОБО МНЕ", aboutTitle: "Немного обо мне", aboutText: "Я студент 3 курса Astana International University по специальности «Вычислительная техника и программное обеспечение». Мне нравится создавать сайты, изучать новые технологии и работать над IT-проектами в команде.", educationTitle: "Образование", educationSpeciality: "Вычислительная техника и программное обеспечение", educationYear: "3 курс", skillsLabel: "НАВЫКИ", skillsTitle: "Мои технические навыки", javaText: "Изучаю основы Java и ООП", pythonText: "Базовые знания Python", cppText: "Начальный уровень", webText: "Создание и оформление сайтов", githubText: "Работа с репозиториями", linuxText: "Изучаю Linux и терминал", figmaText: "Создание дизайна интерфейсов", teamworkText: "Работа в команде и распределение задач", projectsLabel: "ПРОЕКТЫ", projectsTitle: "Мой проект", projectText: "Медицинское веб-приложение, созданное нашей командой. В проекте я руководил командой, распределял задачи, планировал этапы разработки и работал с документацией.", roleTitle: "Моя роль:", roleText: "Руководитель команды", openProject: "Открыть проект", experienceLabel: "ОПЫТ", experienceTitle: "Моя роль в команде", teamLeadTitle: "Project Team Lead", experienceText: "Во время разработки проекта я отвечал за организацию командной работы и контроль выполнения задач.", experienceOne: "Руководил командой во время разработки проекта", experienceTwo: "Распределял задачи между участниками команды", experienceThree: "Планировал этапы проекта и контролировал прогресс", experienceFour: "Работал с документацией и координировал команду", languagesLabel: "ЯЗЫКИ", languagesTitle: "Языки общения", kazakh: "Казахский", russian: "Русский", english: "Английский", native: "Родной язык", fluent: "Свободно", contactLabel: "КОНТАКТЫ", contactTitle: "Давайте работать вместе", contactText: "Вы можете связаться со мной по электронной почте или найти меня в социальных сетях.", phoneTitle: "Телефон", rights: "Все права защищены.", backToTop: "Наверх ↑"
+                },
+                kz: {
+                    navAbout: "Мен туралы", navSkills: "Дағдылар", navProjects: "Жобалар", navExperience: "Тәжірибе", navContact: "Байланыс", hello: "Сәлем, менің атым", profession: "IT студенті және жоба жетекшісі", heroDescription: "Бағдарламалау, веб-әзірлеу және Linux үйреніп жүрген IT студентімін.", viewProjects: "Жобаларым", contactMe: "Менімен байланысу", aboutLabel: "МЕН ТУРАЛЫ", aboutTitle: "Өзім туралы қысқаша", aboutText: "Мен Astana International University университетінің «Есептеу техникасы және бағдарламалық қамтамасыз ету» мамандығы бойынша 3 курс студентімін. Сайт жасауды, жаңа технологияларды үйренуді және командамен IT жобаларында жұмыс істеуді ұнатамын.", educationTitle: "Білім", educationSpeciality: "Есептеу техникасы және бағдарламалық қамтамасыз ету", educationYear: "3 курс", skillsLabel: "ДАҒДЫЛАР", skillsTitle: "Менің техникалық дағдыларым", javaText: "Java және ООП негіздерін үйреніп жүрмін", pythonText: "Python бойынша бастапқы білім", cppText: "Бастапқы деңгей", webText: "Сайттарды жасау және безендіру", githubText: "Репозиторийлермен жұмыс", linuxText: "Linux және терминалды үйрену", figmaText: "Интерфейс дизайнын жасау", teamworkText: "Командада жұмыс істеу және тапсырмаларды бөлу", projectsLabel: "ЖОБАЛАР", projectsTitle: "Менің жобам", projectText: "Біздің команда жасаған медициналық веб-қосымша. Жоба барысында мен команданы басқардым, тапсырмаларды бөлдім, әзірлеу кезеңдерін жоспарладым және құжаттамамен жұмыс істедім.", roleTitle: "Менің рөлім:", roleText: "Команда жетекшісі", openProject: "Жобаны ашу", experienceLabel: "ТӘЖІРИБЕ", experienceTitle: "Командадағы рөлім", teamLeadTitle: "Жоба жетекшісі", experienceText: "Жобаны әзірлеу кезінде командалық жұмысты ұйымдастыруға және тапсырмалардың орындалуын бақылауға жауап бердім.", experienceOne: "Жобаны әзірлеу кезінде команданы басқардым", experienceTwo: "Команда мүшелері арасында тапсырмаларды бөлдім", experienceThree: "Жоба кезеңдерін жоспарлап, прогресті бақыладым", experienceFour: "Құжаттамамен жұмыс істеп, команданы үйлестірдім", languagesLabel: "ТІЛДЕР", languagesTitle: "Сөйлейтін тілдерім", kazakh: "Қазақ тілі", russian: "Орыс тілі", english: "Ағылшын тілі", native: "Ана тілім", fluent: "Еркін", contactLabel: "БАЙЛАНЫС", contactTitle: "Бірге жұмыс істейік", contactText: "Маған электрондық пошта арқылы хабарласа аласыз немесе әлеуметтік желілерден таба аласыз.", phoneTitle: "Телефон", rights: "Барлық құқықтар қорғалған.", backToTop: "Жоғары ↑"
+                },
+                en: {
+                    navAbout: "About me", navSkills: "Skills", navProjects: "Projects", navExperience: "Experience", navContact: "Contact", hello: "Hello, my name is", profession: "IT Student & Project Team Lead", heroDescription: "An IT student learning programming, web development and Linux.", viewProjects: "My projects", contactMe: "Contact me", aboutLabel: "ABOUT ME", aboutTitle: "A little about me", aboutText: "I am a third-year student at Astana International University majoring in Computer Engineering and Software. I enjoy creating websites, learning new technologies and working on IT projects with a team.", educationTitle: "Education", educationSpeciality: "Computer Engineering and Software", educationYear: "3rd year", skillsLabel: "SKILLS", skillsTitle: "My technical skills", javaText: "Learning Java basics and OOP", pythonText: "Basic Python knowledge", cppText: "Beginner level", webText: "Creating and styling websites", githubText: "Working with repositories", linuxText: "Learning Linux and terminal", figmaText: "Creating interface designs", teamworkText: "Teamwork and task distribution", projectsLabel: "PROJECTS", projectsTitle: "My project", projectText: "A medical web application created by our team. During the project, I led the team, distributed tasks, planned development stages and worked with documentation.", roleTitle: "My role:", roleText: "Project Team Lead", openProject: "Open project", experienceLabel: "EXPERIENCE", experienceTitle: "My role in the team", teamLeadTitle: "Project Team Lead", experienceText: "During the project development, I was responsible for organizing teamwork and controlling task completion.", experienceOne: "Led the team during the development of the project", experienceTwo: "Distributed tasks between team members", experienceThree: "Planned project stages and tracked progress", experienceFour: "Worked with documentation and coordinated the team", languagesLabel: "LANGUAGES", languagesTitle: "Languages", kazakh: "Kazakh", russian: "Russian", english: "English", native: "Native language", fluent: "Fluent", contactLabel: "CONTACT", contactTitle: "Let's work together", contactText: "You can contact me by email or find me on social media.", phoneTitle: "Phone", rights: "All rights reserved.", backToTop: "Back to top ↑"
+                }
+            };
 
-        if (globalThemeBtn) {
-            globalThemeBtn.addEventListener('click', () => {
-                currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                localStorage.setItem('theme', currentTheme);
-                applyTheme(currentTheme);
-            });
-        }
+            // Полный словарь Диаса
+            const dictDias = {
+                ru: {
+                    header_subtitle: "Frontend-разработчик", nav_home: "Главная", nav_about: "Обо мне", nav_skills: "Навыки", nav_projects: "Проекты", nav_edu: "Образование", nav_contact: "Контакты", hero_specialty: "Frontend-разработчик / IT Student", hero_university: "Astana International University (AIU)", hero_desc: "Студент AIU, начинающий Frontend-разработчик. Увлекаюсь созданием удобных пользовательских интерфейсов, изучением современных веб-технологий и программированием.", btn_contact: "Связаться со мной", btn_projects: "Посмотреть проекты", about_title: "Обо мне", about_bio_title: "О себе", about_bio_text: "Обучаюсь в Astana International University (AIU). Активно развиваюсь в сфере IT, интересуюсь веб-разработкой и алгоритмами.", about_goals_title: "Цели в IT", about_goals_text: "Освоить современные JavaScript-фреймворки (React/Vue), прокачать навыки коммерческой верстки и вырасти до уровня Middle Frontend-разработчика.", about_interests_title: "Интересы", about_interests_text: "Веб-дизайн, оптимизация интерфейсов, участие в учебных IT-проектах, спортивное программирование и современные технологии.", about_traits_title: "Личные качества", about_traits_text: "Целеустремленность, внимательность к деталям, способность быстро обучаться, ответственность и аналитический склад ума.", skills_title: "Мои навыки", skill_html_desc: "Базовая верстка, адаптивный дизайн, стилизация компонентов", skill_js_desc: "Базовый уровень, манипуляция DOM, обработка событий", skill_cpp_desc: "Основы алгоритмов, ООП, структурирование кода", skill_git_desc: "Контроль версий, фиксация изменений, работа с репозиториями", projects_title: "Проекты", project_1_desc: "Платформа и студенческий хаб для учащихся AIU, созданный для удобного обмена учебными материалами и ресурсами.", project_2_desc: "Адаптивный одностраничный сайт-портфолио с поддержкой светлой/тёмной темы и мультиязычности.", btn_more: "Открыть на GitHub", edu_title: "Образование и опыт", edu_uni: "Astana International University (AIU)", edu_degree: "Студент IT-направления", edu_achievements: "Изучение базовых дисциплин по программированию, алгоритмам, структурам данных и веб-технологиям.", exp_title: "Практический опыт и проекты", exp_company: "Учебная практика / Самообучение", exp_desc: "На данный момент активно развиваю практические навыки через создание учебных проектов и работу с open-source репозиториями на GitHub.", lang_title: "Владение языками", lang_kk: "Казахский", lang_kk_lvl: "Родной язык", lang_ru: "Русский", lang_ru_lvl: "Свободный", lang_en: "Английский", lang_en_lvl: "Элементарный (A2)", contact_title: "Контакты", contact_city: "Город", contact_city_val: "Астана, Казахстан", form_name: "Ваше имя", form_email: "Ваш Email", form_msg: "Сообщение", form_btn: "Отправить сообщение", footer_rights: "Все права защищены."
+                },
+                kz: {
+                    header_subtitle: "Frontend-әзірлеуші", nav_home: "Басты бет", nav_about: "Мен туралы", nav_skills: "Дағдылар", nav_projects: "Жобалар", nav_edu: "Білім", nav_contact: "Байланыс", hero_specialty: "Frontend-әзірлеуші / IT Студент", hero_university: "Astana International University (AIU)", hero_desc: "AIU студенті, бастапқы деңгейдегі Frontend-әзірлеуші. Ыңғайлы веб-интерфейстерді жасауға және бағдарламалауға әуеспін.", btn_contact: "Менімен байланысу", btn_projects: "Жобаларды қарау", about_title: "Мен туралы", about_bio_title: "Өзім туралы", about_bio_text: "Astana International University (AIU) оқу орнында білім алудамын. IT саласында белсенді дамып келемін.", about_goals_title: "IT-дегі мақсаттар", about_goals_text: "Заманауи JavaScript фреймворктарын меңгеру және Middle Frontend-әзірлеуші деңгейіне өсу.", about_interests_title: "Қызығушылықтар", about_interests_text: "Веб-дизайн, интерфейстерді оңтайландыру, оқу IT-жобаларына қатысу.", about_traits_title: "Жеке қасиеттер", about_traits_text: "Мақсаттылық, ұқыптылық, тез үйрену қабілеті және жауапкершілік.", skills_title: "Меңгерген дағдылар", skill_html_desc: "Базалық верстка, адаптивті дизайн, компоненттер стилі", skill_js_desc: "Базалық деңгей, DOM манипуляциясы, оқиғаларды өңдеу", skill_cpp_desc: "Алгоритмдер негіздері, ТАБ, кодты құрылымдау", skill_git_desc: "Нұсқаларды бақылау, GitHub репозиторийлерімен жұмыс", projects_title: "Жобалар", project_1_desc: "AIU студенттеріне арналған оқу материалдары мен ресурстарымен бөлісетін платформа.", project_2_desc: "Адаптивті, екі түсті тақырыбы және тіл таңдауы бар жеке сайт-резюме.", btn_more: "GitHub-та ашу", edu_title: "Білім мен тәжірибе", edu_uni: "Astana International University (AIU)", edu_degree: "IT-бағытының студенті", edu_achievements: "Бағдарламалау, алгоритмдер және веб-технологиялар бойынша базалық пәндерді оқу.", exp_title: "Тәжірибелік дағдылар", exp_company: "Оқу тәжірибесі / Өздігінен үйрену", exp_desc: "Қазіргі уақытта оқу жобалары мен GitHub арқылы тәжірибелік дағдыларымды дамытудамын.", lang_title: "Тілдерді меңгеру", lang_kk: "Қазақ тілі", lang_kk_lvl: "Ана тілі", lang_ru: "Орыс тілі", lang_ru_lvl: "Еркін", lang_en: "Ағылшын тілі", lang_en_lvl: "Бастапқы (A2)", contact_title: "Байланыс", contact_city: "Қала", contact_city_val: "Астана, Қазақстан", form_name: "Сіздің атыңыз", form_email: "Сіздің Email", form_msg: "Хабарлама", form_btn: "Хабарлама жіберу", footer_rights: "Барлық құқықтар қорғалған."
+                },
+                en: {
+                    header_subtitle: "Frontend Developer", nav_home: "Home", nav_about: "About", nav_skills: "Skills", nav_projects: "Projects", nav_edu: "Education", nav_contact: "Contact", hero_specialty: "Frontend Developer / IT Student", hero_university: "Astana International University (AIU)", hero_desc: "AIU student, junior Frontend developer. Passionate about building modern user interfaces, web development, and coding.", btn_contact: "Contact Me", btn_projects: "View Projects", about_title: "About Me", about_bio_title: "Biography", about_bio_text: "Studying at Astana International University (AIU). Passionate about IT and modern web technologies.", about_goals_title: "IT Goals", about_goals_text: "Master JS frameworks (React/Vue) and grow into a strong Middle Frontend Developer.", about_interests_title: "Interests", about_interests_text: "Web design, UI optimization, student projects, competitive programming.", about_traits_title: "Traits", about_traits_text: "Goal-oriented, detail-oriented, fast learner, responsible.", skills_title: "My Skills", skill_html_desc: "Basic layout, responsive design, component styling", skill_js_desc: "Basic JS, DOM manipulation, event handling", skill_cpp_desc: "Algorithms basics, OOP, clean structure", skill_git_desc: "Version control, commits, repository management", projects_title: "Projects", project_1_desc: "A platform and study hub for AIU students to share study materials easily.", project_2_desc: "Responsive portfolio page supporting dark mode and multi-language features.", btn_more: "Open on GitHub", edu_title: "Education & Experience", edu_uni: "Astana International University (AIU)", edu_degree: "IT Student", edu_achievements: "Studying computer science fundamentals, algorithms, and web basics.", exp_title: "Experience & Practice", exp_company: "Academic Projects / Self-study", exp_desc: "Constantly improving frontend skills through study projects and GitHub open-source repositories.", lang_title: "Languages", lang_kk: "Kazakh", lang_kk_lvl: "Native", lang_ru: "Russian", lang_ru_lvl: "Fluent", lang_en: "English", lang_en_lvl: "Elementary (A2)", contact_title: "Contact", contact_city: "City", contact_city_val: "Astana, Kazakhstan", form_name: "Your Name", form_email: "Your Email", form_msg: "Message", form_btn: "Send Message", footer_rights: "All rights reserved."
+                }
+            };
+
+            function applyLanguage(lang) {
+                // Перевод только Главной страницы
+                const main = dictMain[lang] || dictMain['ru'];
+                document.querySelectorAll('#page-main [data-lang]').forEach(el => {
+                    if (main[el.getAttribute('data-lang')]) el.textContent = main[el.getAttribute('data-lang')];
+                });
+                
+                // Перевод только Резюме Тамерлана
+                const tam = dictTam[lang] || dictTam['ru'];
+                document.querySelectorAll('#page-tamerlan [data-lang]').forEach(el => {
+                    if (tam[el.getAttribute('data-lang')]) el.textContent = tam[el.getAttribute('data-lang')];
+                });
+
+                // Перевод только Резюме Диаса (у него атрибуты data-i18n)
+                const dias = dictDias[lang] || dictDias['ru'];
+                document.querySelectorAll('#page-dias [data-i18n]').forEach(el => {
+                    if (dias[el.getAttribute('data-i18n')]) el.textContent = dias[el.getAttribute('data-i18n')];
+                });
+
+                localStorage.setItem('language', lang);
+            }
+
+            let currentLang = localStorage.getItem('language') || 'ru';
+            if (currentLang === 'kk') currentLang = 'kz';
+            
+            if(langSelect) {
+                langSelect.value = currentLang;
+                langSelect.addEventListener('change', (e) => applyLanguage(e.target.value));
+            }
+            applyLanguage(currentLang);
+
+            // =====================================
+            // 4. МОБИЛЬНОЕ МЕНЮ ДИАСА
+            // =====================================
+            const menuToggle = document.getElementById('menu-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+                document.querySelectorAll('#page-dias .nav-link').forEach(link => {
+                    link.addEventListener('click', () => navMenu.classList.remove('active'));
+                });
+            }
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub — DOM тапсырмалары</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a href="../index.html" lang="ru">← Вернуться в дневник</a>
+      <p class="eyebrow">STUDYHUB · JAVASCRIPT</p>
+      <h1>DOM-мен жұмыс</h1>
+      <p>Элементтерді өзгерту, жасау, жою және кластарды басқару.</p>
+    </header>
+
+    <section aria-labelledby="task-one">
+      <h2 id="task-one">1-тапсырма. Элементтермен жұмыс</h2>
+      <p class="hint">ID бойынша табылған элементтің жаңа мәтіні:</p>
+      <p id="greeting" class="result">Бастапқы мәтін</p>
+      <div class="old-element">Бұл ескі элемент жойылады.</div>
+      <p id="removal-status" class="hint" role="status"></p>
+      <div id="paragraph-container"></div>
+      <p id="paragraph-container-hint" class="hint">Абзацты басыңыз: мәтіннің түсі мен қаріп өлшемі өзгереді.</p>
+    </section>
+
+    <section aria-labelledby="task-two">
+      <h2 id="task-two">2-тапсырма. Элемент кластарын басқару</h2>
+      <p class="hint">Батырма active класын қосады немесе жояды.</p>
+      <div id="class-target" class="demo-box bordered">Класы өзгеретін элемент</div>
+      <p id="class-list" aria-live="polite"></p>
+      <button id="toggle-class" type="button" aria-controls="class-target" aria-pressed="false">active класын ауыстыру</button>
+      <p class="hint">Кластар тізімі браузер консоліне де шығарылады (F12 → Console).</p>
+    </section>
+
+    <footer>Жаңа div элементі төменде, body соңына JavaScript арқылы қосылады.</footer>
+    <noscript>Тапсырмаларды көру үшін браузерде JavaScript қосыңыз.</noscript>
+  </main>
+</body>
+</html>

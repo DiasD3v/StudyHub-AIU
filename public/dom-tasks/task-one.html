@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>1-тапсырма — Элементтермен жұмыс | StudyHub</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <nav class="browser-tabs" aria-label="Негізгі навигация">
+    <div class="tabs-group">
+      <a class="browser-tab" href="index.html">Басты бет</a>
+      <a class="browser-tab" href="task-one.html" aria-current="page">1-тапсырма</a>
+      <a class="browser-tab" href="task-two.html">2-тапсырма</a>
+    </div>
+    <a class="diary-link" href="../index.html" lang="ru">← В дневник</a>
+  </nav>
+
+  <main class="task-main">
+    <header class="page-heading">
+      <p class="eyebrow">01 / DOM</p>
+      <h1>Элементтермен жұмыс</h1>
+      <p class="hero-description">Мәтіндерді басып, өзгерісті бақылаңыз. Жаңа элементтерді қосу үшін екі батырма бар.</p>
+    </header>
+
+    <div class="exercise-grid">
+      <section class="exercise" aria-labelledby="greeting-title">
+        <p class="step-label">01 · МӘТІН</p>
+        <h2 id="greeting-title">Мәтінді ауыстыру</h2>
+        <p id="greeting-hint" class="hint">Төмендегі мәтінді басыңыз — «Сәлем, әлем!» пайда болады. Қайта бассаңыз, бастапқы мәтін қайтады.</p>
+        <p id="greeting" class="interactive-text result" role="button" tabindex="0" aria-pressed="false" aria-describedby="greeting-hint">Бастапқы мәтін</p>
+      </section>
+
+      <section class="exercise" aria-labelledby="create-title">
+        <p class="step-label">02 · ЖАҢА ЭЛЕМЕНТ</p>
+        <h2 id="create-title">Элемент қосу</h2>
+        <p id="create-hint" class="hint">Батырманы басыңыз — «Мен жаңа элементпін» мәтіні бар жаңа блок беттің соңына қосылады.</p>
+        <button id="create-element" type="button" aria-describedby="create-hint">Жаңа элемент қосу <span aria-hidden="true">+</span></button>
+        <p id="creation-status" class="status" role="status"></p>
+      </section>
+
+      <section class="exercise" aria-labelledby="remove-title">
+        <p class="step-label">03 · ЖОЮ</p>
+        <h2 id="remove-title">Элементті жою</h2>
+        <p id="remove-hint" class="hint">Ескі элементтің өзін басыңыз — ол беттен жойылады.</p>
+        <div class="old-element interactive-text" role="button" tabindex="0" aria-describedby="remove-hint">Бұл ескі элемент жойылады.</div>
+        <p id="removal-status" class="status" role="status" tabindex="-1"></p>
+      </section>
+
+      <section class="exercise" aria-labelledby="paragraph-title">
+        <p class="step-label">04 · АБЗАЦ</p>
+        <h2 id="paragraph-title">Түс пен өлшем</h2>
+        <p id="paragraph-container-hint" class="hint">Абзацты қосып, мәтіннің өзін басыңыз: түсі мен өлшемі өзгереді. Қайта бассаңыз, бастапқы қалпына келеді.</p>
+        <button id="create-paragraph" type="button" aria-controls="paragraph-container">Абзац қосу <span aria-hidden="true">+</span></button>
+        <div id="paragraph-container"></div>
+      </section>
+    </div>
+
+    <p class="keyboard-hint">Мәтінді пернетақтамен де басуға болады: Tab арқылы таңдаңыз, Enter немесе бос орын пернесін басыңыз.</p>
+    <noscript>Тапсырманы орындау үшін браузерде JavaScript қосыңыз.</noscript>
+  </main>
+
+  <footer class="site-footer">StudyHub · <a href="task-two.html">2-тапсырмаға өту →</a></footer>
+</body>
+</html>

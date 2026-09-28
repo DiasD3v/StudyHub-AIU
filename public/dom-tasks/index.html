@@ -3,40 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
   <title>StudyHub — DOM тапсырмалары</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
 <body>
-  <main>
-    <header>
-      <a href="../index.html" lang="ru">← Вернуться в дневник</a>
+  <nav class="browser-tabs" aria-label="Негізгі навигация">
+    <div class="tabs-group">
+      <a class="browser-tab" href="index.html" aria-current="page">Басты бет</a>
+      <a class="browser-tab" href="task-one.html">1-тапсырма</a>
+      <a class="browser-tab" href="task-two.html">2-тапсырма</a>
+    </div>
+    <a class="diary-link" href="../index.html" lang="ru">← В дневник</a>
+  </nav>
+
+  <main class="home-main">
+    <header class="hero-main">
       <p class="eyebrow">STUDYHUB · JAVASCRIPT</p>
       <h1>DOM-мен жұмыс</h1>
-      <p>Элементтерді өзгерту, жасау, жою және кластарды басқару.</p>
+      <p class="hero-description">Элементтерді өзгертіңіз, жаңасын жасаңыз және кластарды басқарыңыз. Барлығын өзіңіз басып көріңіз.</p>
     </header>
 
-    <section aria-labelledby="task-one">
-      <h2 id="task-one">1-тапсырма. Элементтермен жұмыс</h2>
-      <p class="hint">ID бойынша табылған элементтің жаңа мәтіні:</p>
-      <p id="greeting" class="result">Бастапқы мәтін</p>
-      <div class="old-element">Бұл ескі элемент жойылады.</div>
-      <p id="removal-status" class="hint" role="status"></p>
-      <div id="paragraph-container"></div>
-      <p id="paragraph-container-hint" class="hint">Абзацты басыңыз: мәтіннің түсі мен қаріп өлшемі өзгереді.</p>
+    <section class="tasks-section" aria-labelledby="choose-task">
+      <div class="section-heading">
+        <h2 id="choose-task">Тапсырманы таңдаңыз</h2>
+        <p class="hint">Әр тапсырма — жеке бетте. Жоғарғы қойындылар арқылы ауысыңыз.</p>
+      </div>
+      <div class="task-cards">
+        <a class="task-card" href="task-one.html">
+          <span class="task-number" aria-hidden="true">01</span>
+          <h3>Элементтермен жұмыс</h3>
+          <p>Мәтінді ауыстыру, элемент жасау және жою, абзацтың түсі мен өлшемін өзгерту.</p>
+          <span class="open-link">1-тапсырманы ашу <span aria-hidden="true">→</span></span>
+        </a>
+        <a class="task-card" href="task-two.html">
+          <span class="task-number" aria-hidden="true">02</span>
+          <h3>Кластарды басқару</h3>
+          <p>Элементті басып, active класын қосыңыз немесе алып тастаңыз. Кластар тізімін бақылаңыз.</p>
+          <span class="open-link">2-тапсырманы ашу <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
     </section>
 
-    <section aria-labelledby="task-two">
-      <h2 id="task-two">2-тапсырма. Элемент кластарын басқару</h2>
-      <p class="hint">Батырма active класын қосады немесе жояды.</p>
-      <div id="class-target" class="demo-box bordered">Класы өзгеретін элемент</div>
-      <p id="class-list" aria-live="polite"></p>
-      <button id="toggle-class" type="button" aria-controls="class-target" aria-pressed="false">active класын ауыстыру</button>
-      <p class="hint">Кластар тізімі браузер консоліне де шығарылады (F12 → Console).</p>
-    </section>
-
-    <footer>Жаңа div элементі төменде, body соңына JavaScript арқылы қосылады.</footer>
-    <noscript>Тапсырмаларды көру үшін браузерде JavaScript қосыңыз.</noscript>
   </main>
+  <footer class="site-footer">StudyHub · DOM тапсырмалары</footer>
 </body>
 </html>

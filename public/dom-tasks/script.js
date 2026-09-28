@@ -1,3 +1,47 @@
+// Переключаем разделы внутри index.html, не меняя адрес и состояние заданий.
+const pageTabs = Array.from(document.querySelectorAll('.browser-tab'));
+const pages = document.querySelectorAll('[role="tabpanel"]');
+
+function switchPage(pageId) {
+  const activeTab = pageTabs.find(tab => tab.dataset.page === pageId);
+  if (!activeTab) return;
+
+  pages.forEach(page => {
+    page.hidden = page.id !== pageId;
+  });
+  pageTabs.forEach(tab => {
+    const selected = tab === activeTab;
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+  });
+
+  // Созданный в конце body блок относится только к первому заданию.
+  const newDiv = document.querySelector('.new-div');
+  if (newDiv) newDiv.hidden = pageId !== 'page-one';
+
+  activeTab.focus();
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll('[data-page]').forEach(button => {
+  button.addEventListener('click', () => switchPage(button.dataset.page));
+});
+
+// Вкладки доступны стрелками, Home и End; Enter и пробел работают как обычно.
+pageTabs.forEach((tab, index) => {
+  tab.addEventListener('keydown', event => {
+    let nextIndex;
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % pageTabs.length;
+    else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + pageTabs.length) % pageTabs.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = pageTabs.length - 1;
+    else return;
+
+    event.preventDefault();
+    switchPage(pageTabs[nextIndex].dataset.page);
+  });
+});
+
 // Текстовые элементы работают и по клику, и с клавиатуры.
 function onTextActivate(element, action) {
   element.addEventListener('click', action);
@@ -9,7 +53,7 @@ function onTextActivate(element, action) {
   });
 }
 
-// Каждый блок запускается только на своей странице.
+// Обработчики обоих заданий подключаются один раз при загрузке страницы.
 const greeting = document.getElementById('greeting');
 
 if (greeting) {

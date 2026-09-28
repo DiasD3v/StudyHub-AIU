@@ -1,42 +1,103 @@
 <!DOCTYPE html>
 <html lang="kk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
-  <title>StudyHub — DOM тапсырмалары</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <nav class="browser-tabs" aria-label="Негізгі навигация">
-    <div class="tabs-group">
-      <a class="browser-tab" href="index.html" aria-current="page">Басты бет</a>
-      <a class="browser-tab" href="task-one.html">1-тапсырма</a>
-      <a class="browser-tab" href="task-two.html">2-тапсырма</a>
-    </div>
-  </nav>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>StudyHub — DOM тапсырмалары</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <nav class="browser-tabs" aria-label="Негізгі навигация">
+      <div class="tabs-group" role="tablist" aria-label="Тапсырмалар">
+        <button class="browser-tab" id="tab-home" type="button" role="tab" data-page="page-home" aria-controls="page-home" aria-selected="true">Басты бет</button>
+        <button class="browser-tab" id="tab-one" type="button" role="tab" data-page="page-one" aria-controls="page-one" aria-selected="false" tabindex="-1">1-тапсырма</button>
+        <button class="browser-tab" id="tab-two" type="button" role="tab" data-page="page-two" aria-controls="page-two" aria-selected="false" tabindex="-1">2-тапсырма</button>
+      </div>
+    </nav>
 
-  <main>
-    <header class="page-heading">
-      <h1>DOM тапсырмалары</h1>
-      <p>JavaScript бойынша практикалық жұмыстар.</p>
-    </header>
+    <main>
+      <div id="page-home" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
+        <header class="page-heading">
+          <h1>DOM тапсырмалары</h1>
+          <p>JavaScript бойынша практикалық жұмыстар.</p>
+        </header>
 
-    <section aria-labelledby="choose-task">
-      <h2 id="choose-task">Тапсырмалар</h2>
-      <ul class="task-list">
-        <li>
-          <a href="task-one.html">1-тапсырма. Элементтермен жұмыс</a>
-          <p>Мәтінді өзгерту, элементтерді қосу және жою.</p>
-        </li>
-        <li>
-          <a href="task-two.html">2-тапсырма. Кластарды басқару</a>
-          <p>Элементке active класын қосу және алып тастау.</p>
-        </li>
-      </ul>
-    </section>
+        <section aria-labelledby="choose-task">
+          <h2 id="choose-task">Тапсырмалар</h2>
+          <ul class="task-list">
+            <li>
+              <button class="text-link" type="button" data-page="page-one">1-тапсырма. Элементтермен жұмыс</button>
+              <p>Мәтінді өзгерту, элементтерді қосу және жою.</p>
+            </li>
+            <li>
+              <button class="text-link" type="button" data-page="page-two">2-тапсырма. Кластарды басқару</button>
+              <p>Элементке active класын қосу және алып тастау.</p>
+            </li>
+          </ul>
+        </section>
+      </div>
 
-  </main>
-  <footer class="site-footer">StudyHub · DOM тапсырмалары</footer>
-</body>
+      <div id="page-one" role="tabpanel" aria-labelledby="tab-one" tabindex="0" hidden>
+        <header class="page-heading">
+          <h1>1-тапсырма. Элементтермен жұмыс</h1>
+        </header>
+
+        <div class="exercise-list">
+          <section class="exercise" aria-labelledby="greeting-title">
+            <h2 id="greeting-title">1. Мәтінді өзгерту</h2>
+            <p id="greeting-hint" class="hint">Мәтінді басыңыз. Қайта басқанда бастапқы мәтін қайтады.</p>
+            <p id="greeting" class="interactive-text result" role="button" tabindex="0" aria-pressed="false" aria-describedby="greeting-hint">Бастапқы мәтін</p>
+          </section>
+
+          <section class="exercise" aria-labelledby="create-title">
+            <h2 id="create-title">2. Элемент қосу</h2>
+            <p id="create-hint" class="hint">Жаңа элемент беттің соңына қосылады.</p>
+            <button id="create-element" type="button" aria-describedby="create-hint">Элемент қосу</button>
+            <p id="creation-status" class="status" role="status"></p>
+          </section>
+
+          <section class="exercise" aria-labelledby="remove-title">
+            <h2 id="remove-title">3. Элементті жою</h2>
+            <p id="remove-hint" class="hint">Жою үшін төмендегі мәтінді басыңыз.</p>
+            <div class="old-element interactive-text" role="button" tabindex="0" aria-describedby="remove-hint">Бұл ескі элемент жойылады.</div>
+            <p id="removal-status" class="status" role="status" tabindex="-1"></p>
+          </section>
+
+          <section class="exercise" aria-labelledby="paragraph-title">
+            <h2 id="paragraph-title">4. Абзацтың стилін өзгерту</h2>
+            <p id="paragraph-container-hint" class="hint">Абзацты қосып, оны басыңыз. Мәтіннің түсі мен өлшемі өзгереді. Қайта басқанда қалпына келеді.</p>
+            <button id="create-paragraph" type="button" aria-controls="paragraph-container">Абзац қосу</button>
+            <div id="paragraph-container"></div>
+          </section>
+        </div>
+
+        <p class="keyboard-hint">Пернетақта: Tab — таңдау, Enter немесе бос орын — басу.</p>
+        <p class="page-links"><button class="text-link" type="button" data-page="page-two">2-тапсырмаға өту →</button></p>
+      </div>
+
+      <div id="page-two" role="tabpanel" aria-labelledby="tab-two" tabindex="0" hidden>
+        <header class="page-heading">
+          <h1>2-тапсырма. Кластарды басқару</h1>
+        </header>
+
+        <section class="exercise class-exercise" aria-labelledby="class-title">
+          <h2 id="class-title">Класты қосу және алып тастау</h2>
+          <p id="class-hint" class="hint">Элементті басқанда active класы қосылады. Қайта басқанда жойылады.</p>
+          <div id="class-target" class="demo-box bordered" role="button" tabindex="0" aria-pressed="false" aria-describedby="class-hint">Класы өзгеретін элемент</div>
+          <div class="class-output">
+            <p id="class-list" role="status">Элемент кластары: demo-box, bordered</p>
+          </div>
+          <p class="hint">Кластар тізімі браузер консоліне де шығарылады (F12 → Console).</p>
+        </section>
+
+        <p class="keyboard-hint">Пернетақта: Tab — таңдау, Enter немесе бос орын — басу.</p>
+        <p class="page-links"><button class="text-link" type="button" data-page="page-one">← 1-тапсырмаға өту</button></p>
+      </div>
+
+      <noscript>Тапсырмаларды ашу үшін браузерде JavaScript қосыңыз.</noscript>
+    </main>
+    <footer class="site-footer">StudyHub · DOM тапсырмалары</footer>
+  </body>
 </html>

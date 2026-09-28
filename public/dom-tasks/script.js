@@ -1,61 +1,87 @@
-// 1. Находим элемент по ID и меняем его текст.
+// Текстовые элементы работают и по клику, и с клавиатуры.
+function onTextActivate(element, action) {
+  element.addEventListener('click', action);
+  element.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (!event.repeat) action();
+    }
+  });
+}
+
+// Каждый блок запускается только на своей странице.
 const greeting = document.getElementById('greeting');
-greeting.textContent = 'Сәлем, әлем!';
 
-// 2. Создаём div с нужным классом и добавляем последним элементом body.
-const newDiv = document.createElement('div');
-newDiv.classList.add('new-div');
-newDiv.textContent = 'Мен жаңа элементпін';
-document.body.appendChild(newDiv);
+if (greeting) {
+  // 1. Находим текст по ID. Меняем его только после нажатия.
+  onTextActivate(greeting, () => {
+    const changed = greeting.getAttribute('aria-pressed') !== 'true';
+    greeting.textContent = changed ? 'Сәлем, әлем!' : 'Бастапқы мәтін';
+    greeting.setAttribute('aria-pressed', String(changed));
+  });
 
-// 3. Находим старый элемент по классу и удаляем его из DOM.
-const oldElement = document.querySelector('.old-element');
-if (oldElement) {
-  oldElement.remove();
-  document.getElementById('removal-status').textContent = 'Ескі элемент жойылды.';
+  // 2. По кнопке создаём div и добавляем последним элементом body.
+  const createElementButton = document.getElementById('create-element');
+  createElementButton.addEventListener('click', () => {
+    if (document.querySelector('.new-div')) return;
+
+    const newDiv = document.createElement('div');
+    newDiv.classList.add('new-div');
+    newDiv.textContent = 'Мен жаңа элементпін';
+    newDiv.tabIndex = -1;
+    document.body.appendChild(newDiv);
+
+    createElementButton.disabled = true;
+    document.getElementById('creation-status').textContent = 'Жаңа элемент беттің соңына қосылды.';
+    newDiv.focus();
+  });
+
+  // 3. Старый элемент остаётся на странице, пока пользователь его не нажмёт.
+  const oldElement = document.querySelector('.old-element');
+  onTextActivate(oldElement, () => {
+    oldElement.remove();
+    const status = document.getElementById('removal-status');
+    status.textContent = 'Ескі элемент жойылды.';
+    status.focus();
+  });
+
+  // 4. Второй кнопкой создаём абзац. Его стиль меняется по нажатию на текст.
+  const createParagraphButton = document.getElementById('create-paragraph');
+  createParagraphButton.addEventListener('click', () => {
+    const container = document.getElementById('paragraph-container');
+    if (container.firstElementChild) return;
+
+    const paragraph = document.createElement('p');
+    paragraph.textContent = 'Бұл ауыспалы абзац';
+    paragraph.classList.add('interactive-text', 'interactive-paragraph');
+    paragraph.tabIndex = 0;
+    paragraph.setAttribute('role', 'button');
+    paragraph.setAttribute('aria-pressed', 'false');
+    paragraph.setAttribute('aria-describedby', 'paragraph-container-hint');
+
+    onTextActivate(paragraph, () => {
+      const enlarged = paragraph.getAttribute('aria-pressed') !== 'true';
+      paragraph.style.color = enlarged ? '#6d28d9' : '';
+      paragraph.style.fontSize = enlarged ? '24px' : '';
+      paragraph.setAttribute('aria-pressed', String(enlarged));
+    });
+
+    container.appendChild(paragraph);
+    createParagraphButton.disabled = true;
+    paragraph.focus();
+  });
 }
 
-// 4. Создаём абзац и добавляем его в контейнер первого задания.
-const paragraph = document.createElement('p');
-paragraph.textContent = 'Бұл ауыспалы абзац';
-paragraph.classList.add('interactive-paragraph');
-paragraph.tabIndex = 0;
-paragraph.setAttribute('role', 'button');
-paragraph.setAttribute('aria-describedby', 'paragraph-container-hint');
-document.getElementById('paragraph-container').appendChild(paragraph);
-
-// 5. При нажатии меняем цвет текста и размер шрифта.
-function changeParagraphStyle() {
-  paragraph.style.color = '#7c3aed';
-  paragraph.style.fontSize = '24px';
-}
-
-paragraph.addEventListener('click', changeParagraphStyle);
-// Тот же результат доступен с клавиатуры.
-paragraph.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    changeParagraphStyle();
-  }
-});
-
-// Задание 2. Выводим все классы выбранного элемента в консоль и соседний p.
+// Задание 2. Нажатие на сам элемент переключает только класс active.
 const classTarget = document.getElementById('class-target');
-const classListOutput = document.getElementById('class-list');
-const toggleButton = document.getElementById('toggle-class');
 
-function showClasses() {
-  const classes = Array.from(classTarget.classList).join(', ');
-  console.log('Элемент кластары:', classes);
-  classListOutput.textContent = `Элемент кластары: ${classes}`;
+if (classTarget) {
+  onTextActivate(classTarget, () => {
+    const isActive = classTarget.classList.toggle('active');
+    classTarget.setAttribute('aria-pressed', String(isActive));
+
+    const classes = Array.from(classTarget.classList).join(', ');
+    console.log('Элемент кластары:', classes);
+    document.getElementById('class-list').textContent = `Элемент кластары: ${classes}`;
+  });
 }
-
-toggleButton.addEventListener('click', () => {
-  // toggle добавляет отсутствующий класс и удаляет существующий.
-  const isActive = classTarget.classList.toggle('active');
-  toggleButton.setAttribute('aria-pressed', String(isActive));
-  showClasses();
-});
-
-// Показываем исходный список сразу после загрузки страницы.
-showClasses();

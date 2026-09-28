@@ -197,6 +197,8 @@ input:focus, select:focus {
   border: none;
   cursor: pointer;
   font-weight: 500;
+
+  
 }
 .btn-delete:hover {
   text-decoration: underline;

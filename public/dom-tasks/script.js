@@ -53,7 +53,7 @@ function onTextActivate(element, action) {
   });
 }
 
-// Обработчики обоих заданий подключаются один раз при загрузке страницы.
+// Обработчики заданий подключаются один раз при загрузке страницы.
 const greeting = document.getElementById('greeting');
 
 if (greeting) {
@@ -105,7 +105,7 @@ if (greeting) {
 
     onTextActivate(paragraph, () => {
       const enlarged = paragraph.getAttribute('aria-pressed') !== 'true';
-      paragraph.style.color = enlarged ? '#6d28d9' : '';
+      paragraph.style.color = enlarged ? 'var(--paragraph-color)' : '';
       paragraph.style.fontSize = enlarged ? '24px' : '';
       paragraph.setAttribute('aria-pressed', String(enlarged));
     });
@@ -130,13 +130,12 @@ if (classTarget) {
   });
 }
 
-// Задание 3. Создание таблицы и работа с цветами ячеек.
+// Задание 3. Размеры задаёт пользователь; каждый td хранит свой цвет.
 const tableContainer = document.getElementById('table-container');
 const tableRows = document.getElementById('table-rows');
 const tableColumns = document.getElementById('table-columns');
 const paintColor = document.getElementById('paint-color');
 const countColor = document.getElementById('count-color');
-
 const colorNames = {
   red: 'Қызыл',
   blue: 'Көк',
@@ -150,75 +149,56 @@ function validTableSize(value) {
 }
 
 function createTable(rows, columns) {
-  // Проверяем ввод до удаления предыдущей таблицы.
+  // Проверяем размеры до замены таблицы, чтобы ошибка не стирала результат.
   if (!validTableSize(rows) || !validTableSize(columns)) {
-    throw new RangeError(
-      'Жолдар мен бағандар саны 1–50 аралығындағы бүтін сан болуы керек.'
-    );
+    throw new RangeError('Жолдар мен бағандар саны 1–50 аралығындағы бүтін сан болуы керек.');
   }
 
   const table = document.createElement('table');
   table.id = 'generated-table';
   table.setAttribute('aria-describedby', 'table-click-hint');
-
   const caption = table.createCaption();
   caption.textContent = `${rows} × ${columns} кесте`;
-
   const body = table.createTBody();
 
   for (let row = 1; row <= rows; row++) {
     const tr = body.insertRow();
-
     for (let column = 1; column <= columns; column++) {
       const cell = tr.insertCell();
-
       cell.dataset.color = 'none';
       cell.dataset.row = row;
       cell.dataset.column = column;
 
+      // Обычная кнопка позволяет нажать ячейку мышью, Enter или пробелом.
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'cell-button';
       button.textContent = `${row}, ${column}`;
-      button.setAttribute(
-        'aria-label',
-        `${row}-жол, ${column}-баған: ${colorNames.none}`
-      );
-
+      button.setAttribute('aria-label', `${row}-жол, ${column}-баған: ${colorNames.none}`);
       cell.appendChild(button);
     }
   }
 
   tableContainer.replaceChildren(table);
   document.getElementById('table-tools').hidden = false;
-
-  document.getElementById('table-status').textContent =
-    `${rows} жол, ${columns} баған: ${rows * columns} ұяшық құрылды.`;
-
+  document.getElementById('table-status').textContent = `${rows} жол, ${columns} баған: ${rows * columns} ұяшық құрылды.`;
   showColorCount();
 }
 
 function countCellsByColor(color) {
   const cells = tableContainer.querySelectorAll('td');
-
-  return Array.from(cells)
-    .filter(cell => cell.dataset.color === color)
-    .length;
+  return Array.from(cells).filter(cell => cell.dataset.color === color).length;
 }
 
 function showColorCount() {
   const color = countColor.value;
-
-  document.getElementById('color-count').textContent =
-    `${colorNames[color]} ұяшықтар саны: ${countCellsByColor(color)}`;
+  document.getElementById('color-count').textContent = `${colorNames[color]} ұяшықтар саны: ${countCellsByColor(color)}`;
 }
 
 document.getElementById('table-form').addEventListener('submit', event => {
   event.preventDefault();
-
   const rows = tableRows.valueAsNumber;
   const columns = tableColumns.valueAsNumber;
-
   tableRows.setAttribute('aria-invalid', String(!validTableSize(rows)));
   tableColumns.setAttribute('aria-invalid', String(!validTableSize(columns)));
 
@@ -227,33 +207,52 @@ document.getElementById('table-form').addEventListener('submit', event => {
     document.getElementById('table-error').textContent = '';
   } catch (error) {
     if (!(error instanceof RangeError)) throw error;
-
     document.getElementById('table-error').textContent = error.message;
-
-    const invalidInput = !validTableSize(rows) ? tableRows : tableColumns;
-    invalidInput.focus();
+    (!validTableSize(rows) ? tableRows : tableColumns).focus();
   }
 });
 
 tableContainer.addEventListener('click', event => {
   const cell = event.target.closest('td');
   if (!cell || !tableContainer.contains(cell)) return;
-
-  // Повторное нажатие тем же цветом снимает окраску.
-  const color = cell.dataset.color === paintColor.value
-    ? 'none'
-    : paintColor.value;
-
+  const color = cell.dataset.color === paintColor.value ? 'none' : paintColor.value;
   cell.dataset.color = color;
-
-  cell.querySelector('button').setAttribute(
-    'aria-label',
-    `${cell.dataset.row}-жол, ${cell.dataset.column}-баған: ${colorNames[color]}`
-  );
-
+  cell.querySelector('button').setAttribute('aria-label', `${cell.dataset.row}-жол, ${cell.dataset.column}-баған: ${colorNames[color]}`);
   showColorCount();
 });
 
 countColor.addEventListener('change', showColorCount);
-document.getElementById('count-cells')
-  .addEventListener('click', showColorCount);
+document.getElementById('count-cells').addEventListener('click', showColorCount);
+
+// Задание 4. Оба переключателя управляют одной темой для всего сайта.
+const themeInputs = document.querySelectorAll('[data-theme-toggle]');
+const themeStorageKey = 'studyhub-dom-theme';
+
+function applyTheme(isDark) {
+  const theme = isDark ? 'dark' : 'light';
+  document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="color-scheme"]').content = theme;
+  themeInputs.forEach(input => { input.checked = isDark; });
+  document.getElementById('theme-status').textContent = isDark
+    ? 'Қазір қараңғы тақырып қосулы.'
+    : 'Қазір ашық тақырып қосулы.';
+}
+
+let savedTheme = 'light';
+try {
+  savedTheme = localStorage.getItem(themeStorageKey) || 'light';
+} catch {
+  // При запрете хранилища переключатель всё равно работает.
+}
+applyTheme(savedTheme === 'dark');
+
+themeInputs.forEach(input => {
+  input.addEventListener('change', () => {
+    applyTheme(input.checked);
+    try {
+      localStorage.setItem(themeStorageKey, input.checked ? 'dark' : 'light');
+    } catch {
+      // Тема сохранится до перезагрузки страницы.
+    }
+  });
+});

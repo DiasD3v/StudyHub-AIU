@@ -135,7 +135,6 @@ const tableContainer = document.getElementById('table-container');
 const tableRows = document.getElementById('table-rows');
 const tableColumns = document.getElementById('table-columns');
 const paintColor = document.getElementById('paint-color');
-const countColor = document.getElementById('count-color');
 const colorNames = {
   red: 'Қызыл',
   blue: 'Көк',
@@ -191,8 +190,15 @@ function countCellsByColor(color) {
 }
 
 function showColorCount() {
-  const color = countColor.value;
-  document.getElementById('color-count').textContent = `${colorNames[color]} ұяшықтар саны: ${countCellsByColor(color)}`;
+  let paintedTotal = 0;
+  const colorCounts = Object.entries(colorNames).map(([color, name]) => {
+    const count = countCellsByColor(color);
+    if (color !== 'none') paintedTotal += count;
+    return `${name}: ${count}`;
+  });
+
+  document.getElementById('painted-total').textContent = `Барлық боялған ұяшықтар: ${paintedTotal}`;
+  document.getElementById('color-count-details').textContent = colorCounts.join(' · ');
 }
 
 document.getElementById('table-form').addEventListener('submit', event => {
@@ -220,9 +226,6 @@ tableContainer.addEventListener('click', event => {
   cell.querySelector('button').setAttribute('aria-label', `${cell.dataset.row}-жол, ${cell.dataset.column}-баған: ${colorNames[color]}`);
   showColorCount();
 });
-
-countColor.addEventListener('change', showColorCount);
-document.getElementById('count-cells').addEventListener('click', showColorCount);
 
 // Задание 4. Оба переключателя управляют одной темой для всего сайта.
 const themeInputs = document.querySelectorAll('[data-theme-toggle]');

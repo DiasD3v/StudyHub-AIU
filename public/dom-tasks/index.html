@@ -141,19 +141,12 @@
                   <option value="none">Түссіз</option>
                 </select>
               </label>
-              <label for="count-color">Саналатын түс
-                <select id="count-color">
-                  <option value="red">Қызыл</option>
-                  <option value="blue">Көк</option>
-                  <option value="green">Жасыл</option>
-                  <option value="yellow">Сары</option>
-                  <option value="none">Түссіз</option>
-                </select>
-              </label>
-              <button id="count-cells" type="button">Санау</button>
             </div>
             <p id="table-click-hint" class="hint">Түсті таңдап, ұяшықты басыңыз. Сол түспен қайта басқанда бояу өшеді. Ұяшықтағы сандар — жол мен баған нөмірі.</p>
-            <p id="color-count" role="status"></p>
+            <p id="color-count" role="status" aria-atomic="true">
+              <span id="painted-total"></span><br>
+              <span id="color-count-details" class="hint"></span>
+            </p>
             <div id="table-container" class="table-scroll" role="region" aria-label="Жасалған кесте" tabindex="0"></div>
           </div>
         </section>

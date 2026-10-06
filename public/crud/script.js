@@ -1,269 +1,380 @@
 const API = "https://dummyjson.com/products";
-
-const form = document.getElementById("product-form");
-const titleInput = document.getElementById("product-title");
-const priceInput = document.getElementById("product-price");
-const tableBody = document.getElementById("products");
+const list = document.getElementById("products");
 const count = document.getElementById("product-count");
-const statusText = document.getElementById("status");
-const errorText = document.getElementById("error");
 const loadButton = document.getElementById("load-button");
+const addButton = document.getElementById("add-button");
+const form = document.getElementById("product-form");
 const saveButton = document.getElementById("save-button");
-const cancelButton = document.getElementById("cancel-button");
+const productDialog = document.getElementById("product-dialog");
+const formDialog = document.getElementById("form-dialog");
+const deleteDialog = document.getElementById("delete-dialog");
+
+const fields = {
+  title: document.getElementById("product-title"),
+  price: document.getElementById("product-price"),
+  category: document.getElementById("product-category"),
+  description: document.getElementById("product-description"),
+  tags: document.getElementById("product-tags"),
+  thumbnail: document.getElementById("product-image")
+};
 
 let products = [];
 let editingKey = null;
+let selectedKey = null;
+let pendingDeleteKey = null;
 let nextLocalId = 1;
 let busy = false;
+let hasLoaded = false;
 
-// Общая функция для запросов к API.
+// SVG заданы в коде. Данные API вставляем только через textContent.
+const icons = {
+  edit: '<path d="m16 3 5 5-12 12-6 1 1-6L16 3Z"/><path d="m14 5 5 5"/>',
+  trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/>'
+};
+
+function icon(name) {
+  const span = document.createElement("span");
+  span.setAttribute("aria-hidden", "true");
+  span.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + icons[name] + '</svg>';
+  return span;
+}
+
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function money(value) {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+}
+
+function ratingText(product) {
+  return Number.isFinite(product.rating) ? "★ " + product.rating.toFixed(1) + " / 5" : "Нет оценок";
+}
+
+// Не используем произвольные схемы URL для изображений.
+function imageUrl(value) {
+  try {
+    const url = new URL(value);
+    return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function productImage(product) {
+  const placeholder = element("span", "image-placeholder");
+  placeholder.append(icon("image"), element("span", "", "Нет фотографии"));
+  const source = imageUrl(product.thumbnail || product.images?.[0]);
+  if (!source) return placeholder;
+
+  const image = document.createElement("img");
+  image.src = source;
+  image.alt = product.title;
+  image.loading = "lazy";
+  image.addEventListener("error", () => image.replaceWith(placeholder), { once: true });
+  return image;
+}
+
+// Уведомление показываем внутри верхнего dialog, если он открыт.
+function notify(message, type = "success") {
+  const openDialogs = [...document.querySelectorAll("dialog[open]")];
+  const host = openDialogs.at(-1)?.querySelector(".toast-region")
+    || document.getElementById("notifications");
+  const toast = element("div", "toast " + (type === "error" ? "error" : ""));
+  toast.setAttribute("role", type === "error" ? "alert" : "status");
+  const close = element("button", "icon-button toast-close");
+  close.type = "button";
+  close.setAttribute("aria-label", "Закрыть уведомление");
+  close.append(icon("close"));
+  close.addEventListener("click", () => toast.remove());
+  toast.append(element("p", "", message), close);
+  host.append(toast);
+  if (host.children.length > 3) host.firstElementChild.remove();
+  setTimeout(() => toast.remove(), type === "error" ? 9000 : 5000);
+}
+
 async function request(path, method = "GET", body) {
-  const options = {
-    method,
-    signal: AbortSignal.timeout(15000)
-  };
-
+  const options = { method, signal: AbortSignal.timeout(15000) };
   if (body !== undefined) {
     options.headers = { "Content-Type": "application/json" };
     options.body = JSON.stringify(body);
   }
-
   const response = await fetch(API + path, options);
-
-  if (!response.ok) {
-    throw new Error("HTTP " + response.status);
-  }
-
+  if (!response.ok) throw new Error("Сервер вернул HTTP " + response.status);
   return response.json();
 }
 
-// Блокируем повторные действия во время запроса.
 function setBusy(value) {
   busy = value;
   document.getElementById("form-fields").disabled = value;
-  loadButton.disabled = value;
-
-  tableBody.querySelectorAll("button").forEach(button => {
+  list.setAttribute("aria-busy", String(value));
+  document.querySelectorAll("button:not(.toast-close)").forEach(button => {
     button.disabled = value;
   });
 }
 
-// Обработка загрузки и ошибок для всех операций.
 async function run(action) {
   if (busy) return;
-
-  errorText.textContent = "";
-  statusText.textContent = "Выполняется...";
   setBusy(true);
-
   try {
     await action();
   } catch (error) {
-    statusText.textContent = "";
-    errorText.textContent =
-      "Ошибка: " + error.message +
-      ". Проверьте интернет и попробуйте снова.";
+    const message = error.name === "TimeoutError"
+      ? "Сервер не ответил вовремя. Попробуйте ещё раз."
+      : error instanceof TypeError
+        ? "Нет соединения с API. Проверьте интернет и повторите попытку."
+        : error.message;
+    notify(message, "error");
+    if (!hasLoaded && products.length === 0) renderProducts();
   } finally {
     setBusy(false);
   }
 }
 
-function renderProducts() {
-  tableBody.replaceChildren();
-  count.textContent = products.length;
+function openModal(dialog) {
+  // Старые уведомления не должны оставаться под новым окном.
+  document.querySelectorAll(".toast").forEach(toast => toast.remove());
+  if (!dialog.open) dialog.showModal();
+  document.body.classList.add("modal-open");
+}
 
-  if (products.length === 0) {
-    const cell = tableBody.insertRow().insertCell();
-    cell.colSpan = 4;
-    cell.textContent = "Товаров нет. Загрузите список или добавьте товар.";
+function focusCard(key) {
+  const card = [...list.children].find(item => item.dataset.key === key);
+  (card?.querySelector(".card-open") || addButton).focus();
+}
+
+// Escape, крестик и клик по затемнению закрывают окно.
+document.querySelectorAll("dialog").forEach(dialog => {
+  dialog.addEventListener("cancel", event => {
+    if (busy) event.preventDefault();
+  });
+  dialog.addEventListener("click", event => {
+    if (busy || event.target !== dialog) return;
+    const rect = dialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right
+      || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+  });
+  dialog.addEventListener("close", () => {
+    dialog.querySelector(".toast-region").replaceChildren();
+    if (!document.querySelector("dialog[open]")) {
+      document.body.classList.remove("modal-open");
+      if (document.activeElement === document.body) focusCard(selectedKey);
+    }
+  });
+  dialog.querySelectorAll("[data-close]").forEach(button => {
+    button.append(icon("close"));
+    button.addEventListener("click", () => { if (!busy) dialog.close(); });
+  });
+});
+
+function actionButton(action, product, iconName, label) {
+  const button = element("button", "icon-button" + (action === "delete" ? " danger-icon" : ""));
+  button.type = "button";
+  button.dataset.action = action;
+  button.setAttribute("aria-label", label + ": " + product.title);
+  button.title = label;
+  button.append(icon(iconName));
+  return button;
+}
+
+function renderProducts() {
+  list.replaceChildren();
+  count.textContent = products.length;
+  if (!products.length) {
+    list.append(element("p", "empty-state", hasLoaded
+      ? "Пока нет товаров. Добавьте первый товар."
+      : "Каталог пока не загружен. Нажмите «Обновить каталог»."));
     return;
   }
 
   products.forEach(product => {
-    const row = tableBody.insertRow();
+    const card = element("article", "product-card");
+    card.dataset.key = product.key;
 
-    const values = [
-      product.local ? "Локальный" : product.id,
-      product.title,
-      "$" + Number(product.price).toFixed(2)
-    ];
+    // Настоящая кнопка позволяет открыть карточку клавишами Enter и Space.
+    const open = element("button", "card-open");
+    open.type = "button";
+    open.dataset.action = "open";
+    open.setAttribute("aria-label", "Подробнее: " + product.title);
+    const photo = element("span", "card-image");
+    photo.append(productImage(product));
+    const info = element("span", "card-info");
+    info.append(
+      element("span", "card-category", product.category || "Без категории"),
+      element("span", "card-title", product.title),
+      element("span", "rating", ratingText(product))
+    );
+    open.append(photo, info);
 
-    values.forEach(value => {
-      // textContent безопасно отображает текст.
-      row.insertCell().textContent = value;
-    });
-
-    const actions = document.createElement("div");
-    actions.className = "actions";
-
-    const editButton = document.createElement("button");
-    editButton.type = "button";
-    editButton.className = "btn-secondary";
-    editButton.textContent = product.local
-      ? "Изменить локально"
-      : "Изменить · PATCH";
-
-    editButton.addEventListener("click", () => {
-      editProduct(product.key);
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "btn-delete";
-    deleteButton.textContent = product.local
-      ? "Удалить локально"
-      : "Удалить · DELETE";
-
-    deleteButton.addEventListener("click", () => {
-      deleteProduct(product.key);
-    });
-
-    actions.append(editButton, deleteButton);
-    row.insertCell().append(actions);
+    const actions = element("div", "card-actions");
+    actions.append(
+      actionButton("edit", product, "edit", "Изменить товар"),
+      actionButton("delete", product, "trash", "Удалить товар")
+    );
+    const footer = element("div", "card-footer");
+    footer.append(element("span", "card-price", money(product.price)), actions);
+    card.append(open, footer);
+    list.append(card);
   });
 }
 
-function loadProducts() {
-  return run(async () => {
-    const data = await request("?limit=12");
-
-    products = data.products.map(product => ({
-      ...product,
-      key: "api-" + product.id,
-      local: false
-    }));
-
-    resetForm();
-    renderProducts();
-
-    statusText.textContent =
-      "GET выполнен. Загружено товаров: " + products.length;
-  });
+function fillDetails(product) {
+  document.getElementById("detail-image").replaceChildren(productImage(product));
+  document.getElementById("detail-title").textContent = product.title;
+  document.getElementById("detail-category").textContent = "Категория: " + (product.category || "Не указана");
+  document.getElementById("detail-price").textContent = money(product.price);
+  document.getElementById("detail-rating").textContent = "Рейтинг: " + ratingText(product);
+  document.getElementById("detail-description").textContent = product.description || "Описание пока не добавлено.";
+  const tags = document.getElementById("detail-tags");
+  tags.replaceChildren();
+  if (product.tags?.length) {
+    product.tags.forEach(tag => tags.append(element("span", "tag", tag)));
+  } else {
+    tags.textContent = "Теги не указаны";
+  }
 }
 
-// Сбрасываем форму и возвращаем режим добавления.
-function resetForm() {
-  editingKey = null;
-  form.reset();
-
-  document.getElementById("form-title").textContent = "Добавить товар";
-  saveButton.textContent = "Добавить · POST";
-  cancelButton.hidden = true;
+function showProduct(key) {
+  const product = products.find(item => item.key === key);
+  if (!product || busy) return;
+  selectedKey = key;
+  fillDetails(product);
+  openModal(productDialog);
+  document.getElementById("detail-title").focus();
 }
 
-// Заполняем форму данными выбранного товара.
-function editProduct(key) {
+function openForm(key = null) {
   if (busy) return;
+  const product = products.find(item => item.key === key);
+  if (key !== null && !product) return;
+  editingKey = key;
+  form.reset();
+  Object.entries(fields).forEach(([name, input]) => {
+    input.value = name === "tags" ? (product?.tags || []).join(", ") : (product?.[name] ?? "");
+  });
+  document.getElementById("form-title").textContent = product ? "Изменить товар" : "Добавить товар";
+  saveButton.textContent = product ? "Сохранить изменения" : "Добавить товар";
+  openModal(formDialog);
+  fields.title.focus();
+}
 
+function confirmDelete(key) {
+  if (busy) return;
   const product = products.find(item => item.key === key);
   if (!product) return;
-
-  editingKey = key;
-  titleInput.value = product.title;
-  priceInput.value = product.price;
-
-  document.getElementById("form-title").textContent = "Изменить товар";
-  saveButton.textContent = product.local
-    ? "Сохранить локально"
-    : "Сохранить · PATCH";
-
-  cancelButton.hidden = false;
-  titleInput.focus();
+  pendingDeleteKey = key;
+  document.getElementById("delete-name").textContent = product.title;
+  openModal(deleteDialog);
+  document.getElementById("delete-cancel").focus();
 }
 
-// Добавление или изменение товара.
+// Одна обработка кликов для всей сетки. Иконки не открывают подробности.
+list.addEventListener("click", event => {
+  if (busy) return;
+  const card = event.target.closest(".product-card");
+  if (!card) return;
+  const action = event.target.closest("[data-action]")?.dataset.action || "open";
+  if (action === "edit") openForm(card.dataset.key);
+  else if (action === "delete") confirmDelete(card.dataset.key);
+  else showProduct(card.dataset.key);
+});
+
 form.addEventListener("submit", event => {
   event.preventDefault();
-
   if (busy || !form.reportValidity()) return;
-
-  const title = titleInput.value.trim();
-  const price = Number(priceInput.value);
-
-  if (!title) {
-    errorText.textContent = "Введите название товара.";
-    titleInput.focus();
+  if (!fields.title.value.trim()) {
+    notify("Введите название товара.", "error");
+    fields.title.focus();
+    return;
+  }
+  if (fields.thumbnail.value && !imageUrl(fields.thumbnail.value)) {
+    notify("Укажите ссылку на фото, начинающуюся с https:// или http://.", "error");
+    fields.thumbnail.focus();
     return;
   }
 
-  const body = { title, price };
+  const body = {
+    title: fields.title.value.trim(),
+    price: Number(fields.price.value),
+    category: fields.category.value.trim(),
+    description: fields.description.value.trim(),
+    tags: [...new Set(fields.tags.value.split(",").map(tag => tag.trim()).filter(Boolean))],
+    thumbnail: fields.thumbnail.value.trim()
+  };
 
   run(async () => {
-    if (editingKey === null) {
-      // CREATE — отправляем новый товар на API.
+    let product;
+    const isNew = editingKey === null;
+    if (isNew) {
       const created = await request("/add", "POST", body);
-
-      products.unshift({
-        ...created,
-
-        // DummyJSON может возвращать одинаковый ID.
-        // Для каждого нового товара создаём отдельный ключ.
-        key: "local-" + nextLocalId++,
-        local: true
-      });
-
-      statusText.textContent = "POST выполнен. Товар добавлен.";
+      // POST не сохраняет товар в DummyJSON: повторные ID разделяем ключом.
+      product = { ...created, ...body, key: "local-" + nextLocalId++, local: true };
+      products.unshift(product);
     } else {
-      // UPDATE — изменяем выбранный товар.
-      const product = products.find(item => item.key === editingKey);
-
-      if (!product) {
-        throw new Error("Товар для редактирования не найден");
-      }
-
-      if (product.local) {
-        // DummyJSON не сохраняет новые товары на сервере.
-        Object.assign(product, body);
-        statusText.textContent = "Товар изменён локально.";
-      } else {
-        const updated = await request(
-          "/" + product.id,
-          "PATCH",
-          body
-        );
-
-        Object.assign(product, updated);
-        statusText.textContent = "PATCH выполнен. Товар изменён.";
-      }
+      product = products.find(item => item.key === editingKey);
+      if (!product) throw new Error("Товар не найден.");
+      if (!product.local) await request("/" + product.id, "PATCH", body);
+      // Сохраняем метаданные (рейтинг, images), меняем только поля формы.
+      Object.assign(product, body);
     }
-
-    resetForm();
     renderProducts();
+    if (productDialog.open && selectedKey === product.key) fillDetails(product);
+    formDialog.close();
+    notify(isNew ? "Товар добавлен" : "Изменения сохранены");
+    // После перерисовки возвращаем фокус на новую кнопку карточки.
+    if (!productDialog.open) {
+      setBusy(false);
+      focusCard(product.key);
+    }
   });
 });
 
-// Удаление товара.
-function deleteProduct(key) {
-  if (busy) return;
-
-  const product = products.find(item => item.key === key);
+document.getElementById("delete-confirm").addEventListener("click", () => {
+  const product = products.find(item => item.key === pendingDeleteKey);
   if (!product) return;
-
-  return run(async () => {
-    if (!product.local) {
-      // DELETE — запрос для товара, полученного из API.
-      await request("/" + product.id, "DELETE");
-    }
-
-    // Обновляем список после успешного запроса.
-    products = products.filter(item => item.key !== key);
-
-    if (editingKey === key) {
-      resetForm();
-    }
-
+  run(async () => {
+    if (!product.local) await request("/" + product.id, "DELETE");
+    products = products.filter(item => item.key !== product.key);
     renderProducts();
+    deleteDialog.close();
+    if (productDialog.open && selectedKey === product.key) productDialog.close();
+    pendingDeleteKey = null;
+    setBusy(false);
+    focusCard(products[0]?.key);
+    notify("Товар удалён");
+  });
+});
 
-    statusText.textContent = product.local
-      ? "Товар удалён локально."
-      : "DELETE выполнен. Товар удалён.";
+function loadProducts() {
+  return run(async () => {
+    loadButton.textContent = "Загрузка…";
+    if (!hasLoaded && !products.length) {
+      list.replaceChildren(element("p", "empty-state", "Загружаем товары…"));
+    }
+    try {
+      const data = await request("?limit=12");
+      products = data.products.map(product => ({ ...product, key: "api-" + product.id, local: false }));
+      hasLoaded = true;
+      renderProducts();
+      notify("Каталог обновлён");
+    } finally {
+      loadButton.textContent = "Обновить каталог";
+    }
   });
 }
 
-// Подключаем кнопки.
-cancelButton.addEventListener("click", resetForm);
+document.getElementById("detail-edit").append(icon("edit"));
+document.getElementById("detail-delete").append(icon("trash"));
+document.getElementById("delete-symbol").append(icon("trash"));
+document.getElementById("detail-edit").addEventListener("click", () => openForm(selectedKey));
+document.getElementById("detail-delete").addEventListener("click", () => confirmDelete(selectedKey));
+document.getElementById("cancel-button").addEventListener("click", () => formDialog.close());
+document.getElementById("delete-cancel").addEventListener("click", () => deleteDialog.close());
+addButton.addEventListener("click", () => openForm());
 loadButton.addEventListener("click", loadProducts);
-
-// Загружаем товары при открытии страницы.
-renderProducts();
 loadProducts();

@@ -140,3 +140,130 @@ function loadProducts() {
       "GET выполнен. Загружено товаров: " + products.length;
   });
 }
+
+// Сбрасываем форму и возвращаем режим добавления.
+function resetForm() {
+  editingKey = null;
+  form.reset();
+
+  document.getElementById("form-title").textContent = "Добавить товар";
+  saveButton.textContent = "Добавить · POST";
+  cancelButton.hidden = true;
+}
+
+// Заполняем форму данными выбранного товара.
+function editProduct(key) {
+  if (busy) return;
+
+  const product = products.find(item => item.key === key);
+  if (!product) return;
+
+  editingKey = key;
+  titleInput.value = product.title;
+  priceInput.value = product.price;
+
+  document.getElementById("form-title").textContent = "Изменить товар";
+  saveButton.textContent = product.local
+    ? "Сохранить локально"
+    : "Сохранить · PATCH";
+
+  cancelButton.hidden = false;
+  titleInput.focus();
+}
+
+// Добавление или изменение товара.
+form.addEventListener("submit", event => {
+  event.preventDefault();
+
+  if (busy || !form.reportValidity()) return;
+
+  const title = titleInput.value.trim();
+  const price = Number(priceInput.value);
+
+  if (!title) {
+    errorText.textContent = "Введите название товара.";
+    titleInput.focus();
+    return;
+  }
+
+  const body = { title, price };
+
+  run(async () => {
+    if (editingKey === null) {
+      // CREATE — отправляем новый товар на API.
+      const created = await request("/add", "POST", body);
+
+      products.unshift({
+        ...created,
+
+        // DummyJSON может возвращать одинаковый ID.
+        // Для каждого нового товара создаём отдельный ключ.
+        key: "local-" + nextLocalId++,
+        local: true
+      });
+
+      statusText.textContent = "POST выполнен. Товар добавлен.";
+    } else {
+      // UPDATE — изменяем выбранный товар.
+      const product = products.find(item => item.key === editingKey);
+
+      if (!product) {
+        throw new Error("Товар для редактирования не найден");
+      }
+
+      if (product.local) {
+        // DummyJSON не сохраняет новые товары на сервере.
+        Object.assign(product, body);
+        statusText.textContent = "Товар изменён локально.";
+      } else {
+        const updated = await request(
+          "/" + product.id,
+          "PATCH",
+          body
+        );
+
+        Object.assign(product, updated);
+        statusText.textContent = "PATCH выполнен. Товар изменён.";
+      }
+    }
+
+    resetForm();
+    renderProducts();
+  });
+});
+
+// Удаление товара.
+function deleteProduct(key) {
+  if (busy) return;
+
+  const product = products.find(item => item.key === key);
+  if (!product) return;
+
+  return run(async () => {
+    if (!product.local) {
+      // DELETE — запрос для товара, полученного из API.
+      await request("/" + product.id, "DELETE");
+    }
+
+    // Обновляем список после успешного запроса.
+    products = products.filter(item => item.key !== key);
+
+    if (editingKey === key) {
+      resetForm();
+    }
+
+    renderProducts();
+
+    statusText.textContent = product.local
+      ? "Товар удалён локально."
+      : "DELETE выполнен. Товар удалён.";
+  });
+}
+
+// Подключаем кнопки.
+cancelButton.addEventListener("click", resetForm);
+loadButton.addEventListener("click", loadProducts);
+
+// Загружаем товары при открытии страницы.
+renderProducts();
+loadProducts();

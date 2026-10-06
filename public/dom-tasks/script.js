@@ -259,3 +259,120 @@ themeInputs.forEach(input => {
     }
   });
 });
+
+function resetForm() {
+  editingKey = null;
+  form.reset();
+
+  document.getElementById("form-title").textContent = "Добавить товар";
+  saveButton.textContent = "Добавить · POST";
+  cancelButton.hidden = true;
+}
+
+// Переносим выбранный товар в форму.
+function editProduct(key) {
+  if (busy) return;
+
+  const product = products.find(item => item.key === key);
+  if (!product) return;
+
+  editingKey = key;
+  titleInput.value = product.title;
+  priceInput.value = product.price;
+
+  document.getElementById("form-title").textContent = "Изменить товар";
+  saveButton.textContent = product.local
+    ? "Сохранить локально"
+    : "Сохранить · PATCH";
+
+  cancelButton.hidden = false;
+  titleInput.focus();
+}
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+
+  if (busy || !form.reportValidity()) return;
+
+  const title = titleInput.value.trim();
+  const price = Number(priceInput.value);
+
+  if (!title) {
+    errorText.textContent = "Введите название товара.";
+    titleInput.focus();
+    return;
+  }
+
+  const body = { title, price };
+
+  run(async () => {
+    if (editingKey === null) {
+      // CREATE — добавляем новый товар через API.
+      const created = await request("/add", "POST", body);
+
+      products.unshift({
+        ...created,
+
+        // API может возвращать одинаковый ID для новых товаров.
+        // Для работы на странице используем уникальный ключ.
+        key: "local-" + nextLocalId++,
+        local: true
+      });
+
+      statusText.textContent = "POST выполнен. Товар добавлен.";
+    } else {
+      // UPDATE — изменяем выбранный товар.
+      const product = products.find(item => item.key === editingKey);
+
+      if (product.local) {
+        // Добавленный товар не существует в базе DummyJSON.
+        Object.assign(product, body);
+        statusText.textContent = "Товар изменён локально.";
+      } else {
+        const updated = await request(
+          "/" + product.id,
+          "PATCH",
+          body
+        );
+
+        Object.assign(product, updated);
+        statusText.textContent = "PATCH выполнен. Товар изменён.";
+      }
+    }
+
+    resetForm();
+    renderProducts();
+  });
+});
+
+function deleteProduct(key) {
+  return run(async () => {
+    const product = products.find(item => item.key === key);
+    if (!product) return;
+
+    if (!product.local) {
+      // DELETE — отправляем запрос для товара из API.
+      await request("/" + product.id, "DELETE");
+    }
+
+    // Убираем товар из интерфейса после успешного запроса.
+    products = products.filter(item => item.key !== key);
+
+    if (editingKey === key) {
+      resetForm();
+    }
+
+    renderProducts();
+
+    statusText.textContent = product.local
+      ? "Товар удалён локально."
+      : "DELETE выполнен. Товар удалён.";
+  });
+}
+
+cancelButton.addEventListener("click", resetForm);
+loadButton.addEventListener("click", loadProducts);
+
+// Автоматическая загрузка при открытии страницы.
+renderProducts();
+loadProducts();

@@ -1,0 +1,334 @@
+/* Фильтры */
+.task-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr auto;
+  align-items: end;
+  gap: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: white;
+}
+
+.task-filters label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.task-filters input,
+.task-filters select,
+.form-grid select {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: white;
+  color: var(--text-main);
+  font: inherit;
+}
+
+.task-message {
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#retry-users {
+  margin-bottom: 20px;
+}
+
+/* Карточки заданий */
+.task-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  cursor: default;
+}
+
+.task-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.task-badge {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.task-badge.completed {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.task-card h3 {
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* Исполнитель под заданием */
+.task-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.author-initials {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.author-info {
+  min-width: 0;
+}
+
+.author-info small {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.author-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.author-button:hover {
+  text-decoration: underline;
+}
+
+/* Раскрывающаяся карточка пользователя */
+.task-profile {
+  grid-column: 1 / -1;
+  border: 1px solid #c7d2fe;
+  border-radius: 20px;
+  background: white;
+  overflow: hidden;
+  scroll-margin-top: 24px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.profile-header h2 {
+  font-size: 18px;
+}
+
+.profile-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.profile-person,
+.profile-history {
+  min-width: 0;
+  padding: 28px;
+}
+
+.profile-person {
+  border-right: 1px solid #e2e8f0;
+  background: #f3f4f8;
+}
+
+.profile-photo {
+  display: block;
+  width: 110px;
+  height: 110px;
+  margin-bottom: 18px;
+  padding: 8px;
+  border-radius: 22px;
+  background: white;
+  object-fit: contain;
+}
+
+.profile-person h3 {
+  margin-bottom: 8px;
+  font-size: 24px;
+  letter-spacing: -.025em;
+}
+
+.profile-muted {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.profile-details {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 15px 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.profile-details dt {
+  color: var(--text-secondary);
+}
+
+.profile-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Список работ справа */
+.profile-history h3 {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.profile-history-list {
+  margin-top: 20px;
+  list-style: none;
+}
+
+.profile-history-item {
+  padding: 15px 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.profile-history-item p {
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.profile-history-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-loading {
+  grid-column: 1 / -1;
+  padding: 28px;
+  color: var(--text-secondary);
+}
+
+.profile-loading .btn-secondary {
+  margin-top: 14px;
+}
+
+/* Форма редактирования */
+.form-grid select {
+  font-weight: 400;
+}
+
+.form-grid .task-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 400;
+}
+
+.form-grid .task-check input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  min-width: 0;
+  padding: 0;
+  accent-color: var(--primary);
+}
+
+.task-form-error {
+  margin-top: 16px;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.task-form-error:empty {
+  display: none;
+}
+
+.task-form-actions {
+  margin-top: 24px;
+}
+
+.modal {
+  inset: 0;
+}
+
+select:focus-visible {
+  outline: 3px solid #818cf8;
+  outline-offset: 3px;
+}
+
+/* Адаптация */
+@media (max-width: 1000px) {
+  .task-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .profile-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-person {
+    border-right: 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .profile-person,
+  .profile-history {
+    padding: 24px;
+  }
+
+  .task-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 460px) {
+  .task-filters,
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,7 +1,11 @@
-/* Фильтры */
+/* Панель действий и фильтры */
+.catalog-toolbar {
+  flex-wrap: wrap;
+}
+
 .task-filters {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr auto;
+  grid-template-columns: minmax(0, 2fr) minmax(180px, 1.3fr) minmax(0, 1.5fr) auto;
   align-items: end;
   gap: 14px;
   padding: 18px;
@@ -40,7 +44,7 @@
   line-height: 1.6;
 }
 
-#retry-users {
+#retry-data {
   margin-bottom: 20px;
 }
 

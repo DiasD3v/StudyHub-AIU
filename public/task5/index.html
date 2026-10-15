@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>StudyHub — 5-тапсырма</title>
+  <title>StudyHub — Задачи пользователей</title>
 
   <!-- Существующие стили вашего сайта -->
   <link rel="stylesheet" href="../style.css">
@@ -39,11 +39,11 @@
         </a>
 
         <a
-          href="index.html"
+          href="indexx.html"
           class="menu-item active"
           aria-current="page"
         >
-          5-тапсырма
+          Задачи · Todos
         </a>
       </nav>
 
@@ -58,36 +58,46 @@
         <div>
           <p class="eyebrow">STUDYHUB / TASK 05</p>
 
-          <h1>Задания и их авторы</h1>
+          <h1>Задачи пользователей</h1>
 
           <p class="subtitle">
-            Пользователи DummyJSON и учебные задания.
+            Задачи, статусы и исполнители из DummyJSON.
           </p>
         </div>
       </header>
 
       <div class="catalog-toolbar">
         <h2>
-          Все задания
+          Все задачи
           <span id="task-count" class="count-badge">0</span>
         </h2>
+        <button id="add-task" class="btn-primary" type="button" aria-haspopup="dialog" disabled>
+          Добавить задачу
+        </button>
       </div>
+
+      <p class="api-note">
+        DummyJSON предоставляет тестовые данные. Добавления, изменения и удаления действуют
+        до перезагрузки страницы: сервис не сохраняет их на сервере.
+      </p>
 
       <div class="task-filters">
         <label>
-          Поиск по названию
+          Поиск по задаче или исполнителю
           <input
             id="task-search"
             type="search"
-            placeholder="Введите название задания"
+            placeholder="Задача, имя или @логин"
           >
         </label>
 
         <label>
-          По алфавиту
+          Сортировка
           <select id="task-order">
-            <option value="asc">А → Я</option>
-            <option value="desc">Я → А</option>
+            <option value="asc">Задача: A → Z</option>
+            <option value="desc">Задача: Z → A</option>
+            <option value="user-asc">Пользователь: A → Z</option>
+            <option value="user-desc">Пользователь: Z → A</option>
           </select>
         </label>
 
@@ -114,7 +124,7 @@
       ></p>
 
       <button
-        id="retry-users"
+        id="retry-data"
         class="btn-secondary"
         type="button"
         hidden
@@ -125,7 +135,7 @@
       <div
         id="task-list"
         class="product-grid task-grid"
-        aria-label="Список заданий"
+        aria-label="Список задач"
       ></div>
 
       <section
@@ -157,7 +167,7 @@
     </main>
   </div>
 
-  <!-- Окно редактирования -->
+  <!-- Окно добавления и редактирования -->
   <dialog
     id="edit-dialog"
     class="modal form-modal"
@@ -167,16 +177,16 @@
       class="icon-button close-button"
       type="button"
       data-close
-      aria-label="Закрыть редактирование"
+      aria-label="Закрыть форму задачи"
     ></button>
 
-    <p class="eyebrow">ЗАДАНИЕ STUDYHUB</p>
-    <h2 id="edit-title">Изменить задание</h2>
+    <p class="eyebrow">ЗАДАЧА ПОЛЬЗОВАТЕЛЯ</p>
+    <h2 id="edit-title">Изменить задачу</h2>
 
     <form id="edit-form">
       <div class="form-grid">
         <label class="full-width">
-          Название задания
+          Текст задачи
           <input
             id="edit-name"
             type="text"
@@ -212,7 +222,7 @@
           Отмена
         </button>
 
-        <button class="btn-primary" type="submit">
+        <button id="save-task" class="btn-primary" type="submit">
           Сохранить изменения
         </button>
       </div>
@@ -232,12 +242,14 @@
       aria-hidden="true"
     ></div>
 
-    <h2 id="delete-title">Удалить задание?</h2>
+    <h2 id="delete-title">Удалить задачу?</h2>
 
     <p id="delete-description">
       «<span id="delete-name"></span>»
       исчезнет из списка и карточки пользователя.
     </p>
+
+    <p id="delete-error" class="task-form-error" role="alert"></p>
 
     <div class="form-actions">
       <button

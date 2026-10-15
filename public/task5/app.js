@@ -14,6 +14,7 @@
   const profile = $("#task-profile");
   const editDialog = $("#edit-dialog");
   const deleteDialog = $("#delete-dialog");
+  const addButton = $("#add-task");
 
   const users = new Map();
 
@@ -28,6 +29,8 @@
   let activeProfileButton = null;
   let profileVersion = 0;
   let toastTimer;
+  let busy = false;
+  let loading = false;
 
   const icons = {
     edit:
@@ -87,21 +90,27 @@
   }
 
   function titleForSort(title) {
-    return title.normalize("NFC").replace(
-      /^\s*\d+\s*[-–—.)]?\s*(?:тапсырма|задание)\s*[.:—–-]?\s*/iu,
-      ""
-    ).trim();
+    return title.normalize("NFC").trim();
   }
 
   function sortTasks(items) {
-    const direction = $("#task-order").value === "desc" ? -1 : 1;
+    const order = $("#task-order").value;
+    const byUser = order.startsWith("user-");
+    const direction = order.endsWith("desc") ? -1 : 1;
 
-    return [...items].sort((a, b) =>
-      direction * alphabet.compare(
+    return [...items].sort((a, b) => {
+      const byTitle = alphabet.compare(
         titleForSort(a.title),
         titleForSort(b.title)
-      ) || alphabet.compare(a.id, b.id)
-    );
+      );
+
+      if (byUser) {
+        return direction * alphabet.compare(userName(a.userId), userName(b.userId))
+          || byTitle || a.id - b.id;
+      }
+
+      return direction * byTitle || a.id - b.id;
+    });
   }
 
   function visibleTasks() {
@@ -113,15 +122,14 @@
     const userId = $("#task-user-filter").value;
 
     return sortTasks(tasks.filter(task => {
-      const matchesTitle = task.title
-        .normalize("NFC")
-        .toLowerCase()
-        .includes(query);
+      const matchesQuery = [task.title, userName(task.userId)].some(value =>
+        value.normalize("NFC").toLowerCase().includes(query)
+      );
 
       const matchesUser =
         userId === "" || task.userId === Number(userId);
 
-      return matchesTitle && matchesUser;
+      return matchesQuery && matchesUser;
     }));
   }
 
@@ -145,7 +153,7 @@
           data-action="edit"
           data-id="${id}"
           aria-label="Изменить: ${title}"
-          title="Изменить задание"
+          title="Изменить задачу"
           aria-haspopup="dialog"
           ${users.size ? "" : "disabled"}
         >
@@ -158,7 +166,7 @@
           data-action="delete"
           data-id="${id}"
           aria-label="Удалить: ${title}"
-          title="Удалить задание"
+          title="Удалить задачу"
           aria-haspopup="dialog"
         >
           ${icon("trash")}
@@ -231,7 +239,7 @@
 
           <div class="author-info">
             <small>
-              ${task.completed ? "Выполнил" : "Исполнитель"}
+              Исполнитель
             </small>
 
             <button
@@ -252,14 +260,13 @@
     if (!visible.length) {
       list.innerHTML = `
         <p class="empty-state">
-          По выбранным условиям заданий нет.
+          По выбранным условиям задач нет.
         </p>
       `;
     }
 
     $("#task-message").textContent =
-      store.getStorageWarning() ||
-      "Нажми на имя исполнителя, чтобы посмотреть профиль и его задания.";
+      "Нажми на имя исполнителя, чтобы посмотреть профиль и его задачи.";
   }
 
   function notify(message, warning = false) {
@@ -291,15 +298,16 @@
     );
   }
 
-  function focusTask(id) {
+  function focusTask(id, scroll = false) {
     const card = [...list.querySelectorAll(".task-card")]
-      .find(node => node.dataset.taskId === id);
+      .find(node => Number(node.dataset.taskId) === id);
 
     const target =
       card?.querySelector("button:not(:disabled)") ||
       $("#task-search");
 
     target.focus({ preventScroll: true });
+    if (scroll && card) card.scrollIntoView({ block: "nearest" });
   }
 
   function renderProfile(user) {
@@ -342,8 +350,8 @@
       </div>
 
       <div class="profile-history">
-        <p class="eyebrow">УЧЕБНЫЕ РАБОТЫ</p>
-        <h3>Задания пользователя</h3>
+        <p class="eyebrow">ЗАДАЧИ ПОЛЬЗОВАТЕЛЯ</p>
+        <h3>Все задачи исполнителя</h3>
 
         <p class="profile-muted">
           Всего: ${related.length}
@@ -445,14 +453,30 @@
     document.body.classList.add("modal-open");
   }
 
-  function openEditor(id) {
+  function setDialogBusy(dialog, value) {
+    busy = value;
+    dialog.setAttribute("aria-busy", String(value));
+    dialog.querySelectorAll("button, input, select").forEach(control => {
+      control.disabled = value;
+    });
+  }
+
+  function errorMessage(error) {
+    return error instanceof TypeError
+      ? "Нет соединения с API. Проверь интернет и повтори попытку."
+      : error.message;
+  }
+
+  function openEditor(id = null) {
     const task = tasks.find(item => item.id === id);
-    if (!task || !users.size) return;
+    if (busy || loading || !users.size || (id !== null && !task)) return;
 
     editingId = id;
 
-    $("#edit-name").value = task.title;
-    $("#edit-completed").checked = task.completed;
+    $("#edit-title").textContent = task ? "Изменить задачу" : "Добавить задачу";
+    $("#save-task").textContent = task ? "Сохранить изменения" : "Добавить";
+    $("#edit-name").value = task?.title ?? "";
+    $("#edit-completed").checked = task?.completed ?? false;
     $("#edit-error").textContent = "";
 
     const sortedUsers = [...users.values()].sort((a, b) =>
@@ -460,12 +484,15 @@
     );
 
     $("#edit-user").replaceChildren(
+      new Option("Выберите исполнителя", ""),
       ...sortedUsers.map(user =>
         new Option(userName(user.id), user.id)
       )
     );
 
-    $("#edit-user").value = String(task.userId);
+    const selectedUserId = task?.userId || Number($("#task-user-filter").value) ||
+      Number(activeProfileButton?.dataset.userId);
+    $("#edit-user").value = users.has(selectedUserId) ? String(selectedUserId) : "";
 
     openModal(editDialog);
   }
@@ -476,6 +503,7 @@
 
     deletingId = id;
     $("#delete-name").textContent = task.title;
+    $("#delete-error").textContent = "";
 
     openModal(deleteDialog);
   }
@@ -487,11 +515,17 @@
         button.innerHTML = icon("close");
       }
 
-      button.addEventListener("click", () => dialog.close());
+      button.addEventListener("click", () => {
+        if (!busy) dialog.close();
+      });
+    });
+
+    dialog.addEventListener("cancel", event => {
+      if (busy) event.preventDefault();
     });
 
     dialog.addEventListener("click", event => {
-      if (event.target !== dialog) return;
+      if (busy || event.target !== dialog) return;
 
       const rect = dialog.getBoundingClientRect();
 
@@ -522,6 +556,7 @@
 
   // Обрабатывает кнопки и на карточках, и внутри раскрытого профиля.
   list.addEventListener("click", event => {
+    if (busy || loading) return;
     const button = event.target.closest("button[data-action]");
     if (!button || !list.contains(button)) return;
 
@@ -530,48 +565,71 @@
     if (action === "profile") {
       openProfile(Number(button.dataset.userId), button);
     } else if (action === "edit") {
-      openEditor(button.dataset.id);
+      openEditor(Number(button.dataset.id));
     } else if (action === "delete") {
-      confirmDeletion(button.dataset.id);
+      confirmDeletion(Number(button.dataset.id));
     }
   });
 
-  $("#edit-form").addEventListener("submit", event => {
+  $("#edit-form").addEventListener("submit", async event => {
     event.preventDefault();
 
-    if (!editingId || !event.currentTarget.reportValidity()) return;
+    if (busy || !editDialog.open || !event.currentTarget.reportValidity()) return;
+
+    $("#edit-error").textContent = "";
+    setDialogBusy(editDialog, true);
 
     try {
-      const id = editingId;
+      const isNew = editingId === null;
+      let id = editingId;
 
-      const result = store.updateTask(id, {
+      const fields = {
         title: $("#edit-name").value,
         userId: Number($("#edit-user").value),
         completed: $("#edit-completed").checked
-      });
+      };
 
+      if (isNew) {
+        id = (await store.addTask(fields)).id;
+      } else {
+        await store.updateTask(id, fields);
+      }
+
+      tasks = store.getTasks();
+      const resetFilters = isNew && !visibleTasks().some(task => task.id === id);
+      if (resetFilters) {
+        $("#task-search").value = "";
+        $("#task-user-filter").value = "";
+      }
+
+      setDialogBusy(editDialog, false);
       editDialog.close();
       renderTasks();
 
-      let message = "Изменения сохранены";
+      let message = isNew
+        ? "Задача добавлена до перезагрузки страницы"
+        : "Задача изменена до перезагрузки страницы";
 
-      if (!visibleTasks().some(task => task.id === id)) {
-        message += ". Задание скрыто текущими фильтрами";
+      if (resetFilters) {
+        message += ". Фильтры сброшены, чтобы показать новую задачу";
+      } else if (!visibleTasks().some(task => task.id === id)) {
+        message += ". Задача скрыта текущими фильтрами";
       }
 
-      if (!result.saved) {
-        message = "Задание изменено. " + result.warning;
-      }
-
-      notify(message, !result.saved);
-      focusTask(id);
+      notify(message);
+      focusTask(id, isNew);
     } catch (error) {
-      $("#edit-error").textContent = error.message;
+      $("#edit-error").textContent = errorMessage(error);
+    } finally {
+      setDialogBusy(editDialog, false);
     }
   });
 
-  $("#confirm-delete").addEventListener("click", () => {
-    if (!deletingId) return;
+  $("#confirm-delete").addEventListener("click", async () => {
+    if (busy || !deletingId) return;
+
+    $("#delete-error").textContent = "";
+    setDialogBusy(deleteDialog, true);
 
     try {
       const visible = visibleTasks();
@@ -581,22 +639,19 @@
         visible[position + 1] || visible[position - 1]
       )?.id;
 
-      const result = store.deleteTask(deletingId);
+      await store.deleteTask(deletingId);
 
+      setDialogBusy(deleteDialog, false);
       deleteDialog.close();
       renderTasks();
 
-      notify(
-        "Задание удалено" + (
-          result.saved ? "" : ". " + result.warning
-        ),
-        !result.saved
-      );
+      notify("Задача удалена до перезагрузки страницы");
 
       focusTask(nextId);
     } catch (error) {
-      deleteDialog.close();
-      notify(error.message, true);
+      $("#delete-error").textContent = errorMessage(error);
+    } finally {
+      setDialogBusy(deleteDialog, false);
     }
   });
 
@@ -614,6 +669,7 @@
   $("#task-search").addEventListener("input", renderTasks);
   $("#task-order").addEventListener("change", renderTasks);
   $("#task-user-filter").addEventListener("change", renderTasks);
+  addButton.addEventListener("click", () => openEditor());
 
   $("#reset-filters").addEventListener("click", () => {
     $("#task-search").value = "";
@@ -624,33 +680,48 @@
     $("#task-search").focus();
   });
 
-  async function loadUsers() {
-    $("#retry-users").hidden = true;
+  async function loadData() {
+    if (loading) return;
+    loading = true;
+    addButton.disabled = true;
+    $("#retry-data").hidden = true;
+    list.setAttribute("aria-busy", "true");
+    document.querySelectorAll(".task-filters input, .task-filters select, .task-filters button")
+      .forEach(control => { control.disabled = true; });
     $("#task-message").textContent =
-      "Загрузка пользователей DummyJSON…";
+      "Загрузка задач и пользователей DummyJSON…";
+    $("#task-count").textContent = "…";
+    const status = document.createElement("p");
+    status.className = "empty-state";
+    status.textContent = "Загружаем задачи и исполнителей…";
+    list.replaceChildren(status);
 
     try {
-      const loadedUsers = await store.getUsers();
+      await store.load();
 
       users.clear();
 
-      for (const user of loadedUsers) {
+      for (const user of store.getUsers()) {
         users.set(user.id, user);
       }
 
       renderTasks();
-    } catch {
-      renderTasks();
-
+      addButton.disabled = !users.size;
+      document.querySelectorAll(".task-filters input, .task-filters select, .task-filters button")
+        .forEach(control => { control.disabled = false; });
+    } catch (error) {
+      status.textContent = "Не удалось загрузить задачи и пользователей.";
+      $("#task-count").textContent = "—";
       $("#task-message").textContent =
-        "Не удалось загрузить пользователей. Проверь интернет и повтори.";
-
-      $("#retry-users").hidden = false;
+        errorMessage(error);
+      $("#retry-data").hidden = false;
+    } finally {
+      loading = false;
+      list.setAttribute("aria-busy", "false");
     }
   }
 
-  $("#retry-users").addEventListener("click", loadUsers);
+  $("#retry-data").addEventListener("click", loadData);
 
-  renderTasks();
-  loadUsers();
+  loadData();
 })();

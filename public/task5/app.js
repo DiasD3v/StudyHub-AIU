@@ -27,6 +27,8 @@
   let editingId = null;
   let deletingId = null;
   let activeProfileButton = null;
+  let activeProfileUser = null;
+  let profileTaskId = null;
   let profileVersion = 0;
   let toastTimer;
   let busy = false;
@@ -175,18 +177,19 @@
     `;
   }
 
-  function closeProfile(restoreFocus = false) {
+  function finishProfileClose() {
+    if (profile.open) return;
     profileVersion++;
-    profile.hidden = true;
     profile.setAttribute("aria-busy", "false");
 
     activeProfileButton?.setAttribute("aria-expanded", "false");
-
-    if (restoreFocus && activeProfileButton?.isConnected) {
-      activeProfileButton.focus();
-    }
+    const target = activeProfileButton?.isConnected
+      ? activeProfileButton : $("#task-search");
 
     activeProfileButton = null;
+    activeProfileUser = null;
+    profileTaskId = null;
+    target.focus({ preventScroll: true });
   }
 
   function updateUserFilter() {
@@ -207,11 +210,6 @@
 
   function renderTasks() {
     tasks = store.getTasks();
-
-    closeProfile();
-
-    // Переносим профиль перед очисткой сетки, чтобы не удалить его.
-    $(".content").append(profile);
 
     updateUserFilter();
 
@@ -248,6 +246,7 @@
               data-action="profile"
               data-user-id="${task.userId}"
               aria-controls="task-profile"
+              aria-haspopup="dialog"
               aria-expanded="false"
             >
               ${escapeHTML(userName(task.userId))}
@@ -267,12 +266,22 @@
 
     $("#task-message").textContent =
       "Нажми на имя исполнителя, чтобы посмотреть профиль и его задачи.";
+
+    if (profile.open && activeProfileUser) {
+      renderProfile(activeProfileUser);
+      const buttons = [...list.querySelectorAll(".author-button")]
+        .filter(button => Number(button.dataset.userId) === activeProfileUser.id);
+      activeProfileButton = buttons.find(button =>
+        button.closest(".task-card").dataset.taskId === profileTaskId
+      ) || buttons[0] || null;
+      activeProfileButton?.setAttribute("aria-expanded", "true");
+    }
   }
 
   function notify(message, warning = false) {
     clearTimeout(toastTimer);
 
-    const host = $("#notifications");
+    const host = profile.open ? profile.querySelector(".toast-region") : $("#notifications");
     const toast = document.createElement("div");
 
     toast.className = "toast" + (warning ? " error" : "");
@@ -299,6 +308,10 @@
   }
 
   function focusTask(id, scroll = false) {
+    if (profile.open) {
+      $("#close-profile").focus({ preventScroll: true });
+      return;
+    }
     const card = [...list.querySelectorAll(".task-card")]
       .find(node => Number(node.dataset.taskId) === id);
 
@@ -392,36 +405,31 @@
   }
 
   async function openProfile(id, button) {
-    if (activeProfileButton === button && !profile.hidden) {
-      closeProfile(true);
-      return;
-    }
-
-    closeProfile();
-
     const version = ++profileVersion;
     activeProfileButton = button;
+    activeProfileUser = null;
+    profileTaskId = button.closest(".task-card").dataset.taskId;
 
     button.setAttribute("aria-expanded", "true");
-    button.closest(".task-card").after(profile);
-
-    profile.hidden = false;
     profile.setAttribute("aria-busy", "true");
 
     $("#profile-content").innerHTML = `
       <p class="profile-loading">Загрузка профиля…</p>
     `;
+    openModal(profile);
+    $("#profile-content").scrollTop = 0;
+    $("#close-profile").focus({ preventScroll: true });
 
     try {
       const user = await store.getUser(id);
 
       // Старый ответ не должен открывать уже закрытый профиль.
-      if (version !== profileVersion) return;
+      if (version !== profileVersion || !profile.open) return;
 
+      activeProfileUser = user;
       renderProfile(user);
-      profile.scrollIntoView({ block: "nearest" });
     } catch {
-      if (version !== profileVersion) return;
+      if (version !== profileVersion || !profile.open) return;
 
       const wrapper = document.createElement("div");
       wrapper.className = "profile-loading";
@@ -435,7 +443,6 @@
       retry.textContent = "Повторить";
 
       retry.addEventListener("click", () => {
-        closeProfile();
         openProfile(id, button);
       });
 
@@ -540,6 +547,7 @@
     });
 
     dialog.addEventListener("close", () => {
+      dialog.querySelector(".toast-region")?.replaceChildren();
       if (!document.querySelector("dialog[open]")) {
         document.body.classList.remove("modal-open");
       }
@@ -554,11 +562,11 @@
     deletingId = null;
   });
 
-  // Обрабатывает кнопки и на карточках, и внутри раскрытого профиля.
-  list.addEventListener("click", event => {
+  // Общие действия списка и модального профиля.
+  function handleTaskAction(event) {
     if (busy || loading) return;
     const button = event.target.closest("button[data-action]");
-    if (!button || !list.contains(button)) return;
+    if (!button || !event.currentTarget.contains(button)) return;
 
     const action = button.dataset.action;
 
@@ -569,7 +577,10 @@
     } else if (action === "delete") {
       confirmDeletion(Number(button.dataset.id));
     }
-  });
+  }
+
+  list.addEventListener("click", handleTaskAction);
+  profile.addEventListener("click", handleTaskAction);
 
   $("#edit-form").addEventListener("submit", async event => {
     event.preventDefault();
@@ -658,13 +669,7 @@
   $("#close-profile").innerHTML = icon("close");
   $("#delete-symbol").innerHTML = icon("trash");
 
-  $("#close-profile").addEventListener("click", () => {
-    closeProfile(true);
-  });
-
-  profile.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeProfile(true);
-  });
+  profile.addEventListener("close", finishProfileClose);
 
   $("#task-search").addEventListener("input", renderTasks);
   $("#task-order").addEventListener("change", renderTasks);

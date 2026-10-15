@@ -136,18 +136,31 @@
   text-decoration: underline;
 }
 
-/* Раскрывающаяся карточка пользователя */
+/* Профиль поверх страницы; прокручивается только его содержимое. */
 .task-profile {
-  grid-column: 1 / -1;
+  width: min(1000px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
   border: 1px solid #c7d2fe;
   border-radius: 20px;
   background: white;
   overflow: hidden;
-  scroll-margin-top: 24px;
+}
+
+.task-profile[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-profile::backdrop {
+  background: #0f172a80;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .profile-header {
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
@@ -162,6 +175,9 @@
 .profile-columns {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .profile-person,

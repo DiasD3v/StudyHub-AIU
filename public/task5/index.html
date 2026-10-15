@@ -39,7 +39,7 @@
         </a>
 
         <a
-          href="indexx.html"
+          href="index.html"
           class="menu-item active"
           aria-current="page"
         >
@@ -138,11 +138,10 @@
         aria-label="Список задач"
       ></div>
 
-      <section
+      <dialog
         id="task-profile"
-        class="task-profile"
+        class="modal task-profile"
         aria-labelledby="profile-title"
-        hidden
       >
         <header class="profile-header">
           <h2 id="profile-title">Карточка пользователя</h2>
@@ -152,6 +151,8 @@
             class="icon-button"
             type="button"
             aria-label="Закрыть профиль"
+            data-close
+            autofocus
           ></button>
         </header>
 
@@ -159,7 +160,8 @@
           id="profile-content"
           class="profile-columns"
         ></div>
-      </section>
+        <div class="toast-region" aria-label="Уведомления профиля"></div>
+      </dialog>
 
       <noscript>
         Для работы страницы включите JavaScript.

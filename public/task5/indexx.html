@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>StudyHub — 5-тапсырма</title>
+
+  <!-- Существующие стили вашего сайта -->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../crud/style.css">
+
+  <!-- Стили Дидара -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Сначала данные Тамерлана, затем интерфейс Бекулана -->
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        StudyHub<span class="logo-dot">.</span>
+      </div>
+
+      <nav class="menu" aria-label="Основная навигация">
+        <a href="../index.html" class="menu-item">
+          Дневник
+        </a>
+
+        <a href="../dom-tasks/index.html" class="menu-item">
+          DOM тапсырмалары
+        </a>
+
+        <a href="../crud/index.html" class="menu-item">
+          API · CRUD
+        </a>
+
+        <a
+          href="index.html"
+          class="menu-item active"
+          aria-current="page"
+        >
+          5-тапсырма
+        </a>
+      </nav>
+
+      <p class="sidebar-note">
+        Учебный проект<br>
+        Frontend &amp; Backend
+      </p>
+    </aside>
+
+    <main class="content">
+      <header class="catalog-header">
+        <div>
+          <p class="eyebrow">STUDYHUB / TASK 05</p>
+
+          <h1>Задания и их авторы</h1>
+
+          <p class="subtitle">
+            Пользователи DummyJSON и учебные задания.
+          </p>
+        </div>
+      </header>
+
+      <div class="catalog-toolbar">
+        <h2>
+          Все задания
+          <span id="task-count" class="count-badge">0</span>
+        </h2>
+      </div>
+
+      <div class="task-filters">
+        <label>
+          Поиск по названию
+          <input
+            id="task-search"
+            type="search"
+            placeholder="Введите название задания"
+          >
+        </label>
+
+        <label>
+          По алфавиту
+          <select id="task-order">
+            <option value="asc">А → Я</option>
+            <option value="desc">Я → А</option>
+          </select>
+        </label>
+
+        <label>
+          Исполнитель
+          <select id="task-user-filter">
+            <option value="">Все исполнители</option>
+          </select>
+        </label>
+
+        <button
+          id="reset-filters"
+          class="btn-secondary"
+          type="button"
+        >
+          Сбросить
+        </button>
+      </div>
+
+      <p
+        id="task-message"
+        class="task-message"
+        role="status"
+      ></p>
+
+      <button
+        id="retry-users"
+        class="btn-secondary"
+        type="button"
+        hidden
+      >
+        Повторить загрузку
+      </button>
+
+      <div
+        id="task-list"
+        class="product-grid task-grid"
+        aria-label="Список заданий"
+      ></div>
+
+      <section
+        id="task-profile"
+        class="task-profile"
+        aria-labelledby="profile-title"
+        hidden
+      >
+        <header class="profile-header">
+          <h2 id="profile-title">Карточка пользователя</h2>
+
+          <button
+            id="close-profile"
+            class="icon-button"
+            type="button"
+            aria-label="Закрыть профиль"
+          ></button>
+        </header>
+
+        <div
+          id="profile-content"
+          class="profile-columns"
+        ></div>
+      </section>
+
+      <noscript>
+        Для работы страницы включите JavaScript.
+      </noscript>
+    </main>
+  </div>
+
+  <!-- Окно редактирования -->
+  <dialog
+    id="edit-dialog"
+    class="modal form-modal"
+    aria-labelledby="edit-title"
+  >
+    <button
+      class="icon-button close-button"
+      type="button"
+      data-close
+      aria-label="Закрыть редактирование"
+    ></button>
+
+    <p class="eyebrow">ЗАДАНИЕ STUDYHUB</p>
+    <h2 id="edit-title">Изменить задание</h2>
+
+    <form id="edit-form">
+      <div class="form-grid">
+        <label class="full-width">
+          Название задания
+          <input
+            id="edit-name"
+            type="text"
+            maxlength="200"
+            required
+            autofocus
+          >
+        </label>
+
+        <label class="full-width">
+          Исполнитель
+          <select id="edit-user" required></select>
+        </label>
+
+        <label class="task-check full-width">
+          <input id="edit-completed" type="checkbox">
+          Уже выполнено
+        </label>
+      </div>
+
+      <p
+        id="edit-error"
+        class="task-form-error"
+        role="alert"
+      ></p>
+
+      <div class="form-actions task-form-actions">
+        <button
+          class="btn-secondary"
+          type="button"
+          data-close
+        >
+          Отмена
+        </button>
+
+        <button class="btn-primary" type="submit">
+          Сохранить изменения
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Подтверждение удаления -->
+  <dialog
+    id="delete-dialog"
+    class="modal delete-modal"
+    aria-labelledby="delete-title"
+    aria-describedby="delete-description"
+  >
+    <div
+      id="delete-symbol"
+      class="delete-symbol"
+      aria-hidden="true"
+    ></div>
+
+    <h2 id="delete-title">Удалить задание?</h2>
+
+    <p id="delete-description">
+      «<span id="delete-name"></span>»
+      исчезнет из списка и карточки пользователя.
+    </p>
+
+    <div class="form-actions">
+      <button
+        class="btn-secondary"
+        type="button"
+        data-close
+        autofocus
+      >
+        Оставить
+      </button>
+
+      <button
+        id="confirm-delete"
+        class="btn-danger"
+        type="button"
+      >
+        Удалить
+      </button>
+    </div>
+  </dialog>
+
+  <!-- Уведомления снизу страницы -->
+  <div
+    id="notifications"
+    class="toast-region"
+    aria-label="Уведомления"
+  ></div>
+</body>
+</html>
